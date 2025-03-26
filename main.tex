@@ -48,28 +48,22 @@
 \affiliation{Ruhr Universität Bochum}
 
 
-Following sections are not necessarily in order and need to be distributed
-around the results/intro
-
 \maketitle
 
 \section{Introduction}
 
-The Fe-Cr system is an important alloy system with applications in structural and high-temperature environments. The
-\textsigma-phase can form at Cr concentrations between 45 and 50\%at and temperatures ranging from 550 to 800\textdegree
-~\cite{laplanche_phase_2018} significantly influencing the mechanical properties of Fe-Cr alloys. Specifically,
-\textsigma-phase precipitation contributes to embrittlement and reduces corrosion resistance {\color{red}  [ref 2
-detrimental sigma] }. The \textsigma-phase unit cell is shown in \autoref{fig:sigmaUnitCell}. This is an intermetallic
-compound with a tetragonal structure (space group P4\textsubscript{2}/mnm) and exhibits complex atomic arrangements due
-to site-specific partial occupancies.  Understanding its properties is essential for predicting its mechanical behavior
-and phase stability.  There are different approaches to similar problems in atomistic simulations, based for instance on
-Density Functional Theory (DFT). Vesti et. al. ~\cite{vesti_ab-initio_2023} utilize a full sublattice model later
-averaged under an ideal mixing approximation to interpolate the properties of a W-Re \textsigma phase. Kabliman et. al.
-~\cite{kabliman_ab_2012} use a mean field approximation to study several properties of the \textsigma phase in other
-binary systems, also based on full occupancy of the sublattices. This assumption may overlook local atomic configuration
-effects.  In this work, we investigate how explicit consideration of partial occupancy influences the elastic properties
-of the \textsigma-phase through first-principles calculations. We focus on a Fe16Cr14 unit cell which can be modelled
-with nominal and on-site compositions in agreement with experimental observations.
+The Fe-Cr system is an important alloy system with applications in structural and high-temperature environments. 
+The \textsigma-phase can form at Cr concentrations between 45 and 50\%at and temperatures ranging from 550 to 800\textdegree ~\cite{laplanche_phase_2018} significantly influencing the mechanical properties of Fe-Cr alloys. 
+Specifically, \textsigma-phase precipitation contributes to embrittlement and reduces corrosion resistance {\color{red}  [ref 2 detrimental sigma] }.
+The \textsigma-phase unit cell is shown in \autoref{fig:sigmaUnitCell}. 
+This is an intermetallic compound with a tetragonal structure (space group P4\textsubscript{2}/mnm) and exhibits complex atomic arrangements due to site-specific partial occupancies.  
+Understanding its properties is essential for predicting its mechanical behavior and phase stability.  
+There are different approaches to similar problems in atomistic simulations, based for instance on Density Functional Theory (DFT). 
+Vesti et. al. ~\cite{vesti_ab-initio_2023} utilize a full sublattice model later averaged under an ideal mixing approximation to interpolate the properties of a W-Re \textsigma phase. 
+Kabliman et. al. ~\cite{kabliman_ab_2012} use a mean field approximation to study several properties of the \textsigma phase in other binary systems, also based on full occupancy of the sublattices. 
+This assumption may overlook local atomic configuration effects.  
+In this work, we investigate how explicit consideration of partial occupancy influences the elastic properties of the \textsigma-phase through first-principles calculations. 
+We focus on a Fe16Cr14 unit cell which can be modelled with nominal and on-site compositions in agreement with experimental observations.
 
 \begin{figure}
   \subcaptionbox{\protect\label{fig:sigmaUnitCell}}{\includegraphics[height=4cm]{Figure_SigmaPhase001.png}}
@@ -95,19 +89,18 @@ First, we calculate the properties of the \textsigma-phase using a full sublatti
 positions of a WS are occupied either bu Cr or Fe. We calculate formation enthalpies and elastic constants for all the
 possible configurations spanning the full composition range. 
 
-\paragraph{Partial occupancy} To capture the impact of atomic disorder, we explicitly explore all possible atomic arrangements within the
-\textsigma-phase unit cell, incorporating experimentally reported partial occupancies of Wyckoff sites by
-Yakel~\cite{yakel_atom_1983} as reproduced in \autoref{fig:ExptPartialOccupancies}. However, the composition of the 2a
-site requires a bigger unit cell to model accurately. 
-In order to keep the size of the sumulation cell to a unit cell, we consider two approximations to the partial
-occupancies, in both cases disregarding Cr occupation in site 2a.
-A first model, \autoref{fig:PartialOccupanciesA} keeps one Fe atom in the site 4f and 1 Cr atom in site 8i', and rounds
-the integer number of atoms in all sites. In this conditions, the total number of possible configurations is
-$ 1 \times 4 \times \binom{8}{3}\times \binom{8}{1} \times \binom {8}{3} \approx 100k $, which are too many to consider
-dft calculations of a significative sample. Then, we also consider a second model, \autoref{fig:PartialOccupanciesb},
-which keeps the same number of atoms in the 8i and 8j sites, while transferring the Cr atom from 8i' to 4f. This reduces
-the number of possible configurations to $ 1 \times 1 \times \binom{8}{3}\times 1 \times \binom {8}{3}
-= 3136 $, which is a more manageable number of configurations.
+\paragraph{Partial occupancy} To capture the impact of atomic disorder, we explicitly explore all possible atomic
+arrangements within the \textsigma-phase unit cell, incorporating experimentally reported partial occupancies of Wyckoff
+sites by Yakel~\cite{yakel_atom_1983} as reproduced in \autoref{fig:ExptPartialOccupancies}. However, the composition of
+the 2a site would require a bigger unit cell to model accurately.  In order to keep the size of the simulation cell to
+one unit cell, we consider two approximations to the partial occupancies, in both cases disregarding Cr occupation in
+site 2a and rounding occupancies to integer numbers.  A first model, \autoref{fig:PartialOccupanciesA}, keeps one Fe
+atom in the site 4f and 1 Cr atom in site 8i'.  In this conditions, the total number of possible configurations is $ 1
+\times 4 \times \binom{8}{3}\times \binom{8}{1} \times \binom {8}{3} \approx 100k $, which are too many to consider dft
+calculations of a significative sample. Then, we also consider a second model, \autoref{fig:PartialOccupanciesb}, which
+keeps the same number of atoms in the 8i and 8j sites, while transferring the Cr atom from 8i' to 4f. This reduces the
+number of possible configurations to $ 1 \times 1 \times \binom{8}{3}\times 1 \times \binom {8}{3} = 3136 $, which is a
+more manageable number of configurations.
 
 A subset of representative configurations is selected for detailed elastic constant
 calculations. ~\cite{golesorkhtabar_elastic_2013}.
