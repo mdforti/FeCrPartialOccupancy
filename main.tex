@@ -41,12 +41,13 @@
 \author{Mariano Forti} \email{mariano.forti@icams.rub.de}
 \affiliation{Interdisciplinary cetre for advanced materials simulations (ICAMS), Ruhr Universität Bochum, Germany}
 
-\author{Thomas Hammerschmidt} \email{}
-\affiliation{Interdisciplinary cetre for advanced materials simulations (ICAMS), Ruhr Universität Bochum, Germany}
-
 \author{Guillaume Laplanche} \email{}
 \affiliation{Ruhr Universität Bochum}
 
+\author{Thomas Hammerschmidt} \email{}
+\affiliation{Interdisciplinary cetre for advanced materials simulations (ICAMS), Ruhr Universität Bochum, Germany}
+
+\date{\today}
 
 \maketitle
 
@@ -78,7 +79,7 @@ We focus on a Fe16Cr14 unit cell which can be modelled with nominal and on-site 
 
 We employ first-principles DFT calculations to determine the elastic constants of the Fe-Cr \textsigma-phase at a nominal composition of Fe\textsubscript{16}Cr\textsubscript{14} (48\%at. Cr).
 These calculations are conducted using the Vienna Ab initio Simulation Package (VASP) ~\cite{Hafner_vasp}, utilizing the Perdew-Burke-Ernzerhof (PBE) ~\cite{Perdew1996} exchange-correlation functional and the Projector Augmented Wave (PAW) method ~\cite{Bloch1994, kresse_ultrasoft_1999}.
-The elastic tensor is derived from stress-strain relationships obtained via energy-strain calculations.
+The elastic tensor is derived from stress-strain relationships obtained via energy-strain calculations~\cite{golesorkhtabar_elastic_2013}.
 
 
 \paragraph{Full occupancy}
@@ -87,45 +88,38 @@ First, we calculate the properties of the \textsigma-phase using a full sublatti
 This means, that the lattice positions of a WS are occupied either by Cr or Fe.
 We calculate formation enthalpies and elastic constants for all the possible configurations spanning the full composition range.
 
-\paragraph{Partial occupancy} To capture the impact of atomic disorder, we explicitly explore all possible atomic arrangements within the \textsigma-phase unit cell, incorporating experimentally reported partial occupancies of Wyckoff sites by Yakel~\cite{yakel_atom_1983} as reproduced in \autoref{fig:ExptPartialOccupancies}.  
-A random distribution in the different sublattices could be modelled for instance by a special quasirandom structure [SQS ref] but  this would require a big unit cell to generate a meaningful representation of such atomic distributions.  
+\paragraph{Partial occupancy} To capture the impact of atomic disorder, we explicitly explore all possible atomic arrangements within the \textsigma-phase unit cell, incorporating experimentally reported partial occupancy of WS by Yakel~\cite{yakel_atom_1983} as reproduced in \autoref{fig:PartialOccupancies}.  
+A random distribution in the different sublattices could be modelled for instance by a special quasirandom structure [SQS ref] but  this would require a big unit cell to generate a meaningful representation of such atomic distributions. 
 In addition to this, the measured composition of the 2a site (< 0.5 atom per unit cell) would require a bigger unit cell to model it accurately.
-In order to keep the size of the simulation cell to one unit cell, we consider two approximations to the partial occupancies, in both cases disregarding Cr occupation in site 2a and rounding occupancies to integer numbers.  
-A first model, \autoref{fig:PartialOccupanciesA}, keeps one Fe atom in the site 4f and 1 Cr atom in site 8i'.  
+In order to keep the size of the simulation cell to one unit cell, we consider two approximations to the partial occupancy, in both cases disregarding Cr occupation in site 2a and rounding occupancy to integer numbers.  
+A first model, keeps one Fe atom in the site 4\textit{f} and 1 Cr atom in site 8\textit{i'}.  
 In this condition, the total number of possible configurations is $ 1 \times 4 \times \binom{8}{3}\times \binom{8}{1} \times \binom {8}{3} \approx 100k $, which are too many to consider DFT calculations of a significant sample. 
 We name this model 2\_A3B\_A5B3\_AB7\_A5B3.  
-A second model, \autoref{fig:PartialOccupanciesb}, keeps the same number of atoms in the 8i and 8j sites, while transferring the Cr atom from 8i' to 4f.  
+A second model keeps the same number of atoms in the 8\textit{i} and 8\textit{j} sites, while transferring the Cr atom from 8\textit{i'} to 4\textit{f}.  
 We call this other model B2\_A3B2\_A5B3\_B8\_A5B3. 
 This reduces the number of possible configurations to $1 \times 1 \times \binom{8}{3}\times 1\times\binom {8}{3} = 3136$.~
 %, which is a more manageable number of configurations. 
-A subset of 25 representative configurations of each model is selected for detailed elastic constant calculations. ~\cite{golesorkhtabar_elastic_2013}.
+A subset of 25 representative configurations of each model is selected for detailed elastic constant calculations.
 
 \begin{figure}
-  \subcaptionbox{\protect\label{fig:ExptPartialOccupancies}}{\includegraphics[height=4cm]{example-image-a}}
-  \subcaptionbox{\protect\label{fig:PartialOccupanciesA}}{\includegraphics[height=4cm]{Figure_SigmaPhaseModelledPartialOccupancies_II.png}}
-  \subcaptionbox{\protect\label{fig:PartialOccupanciesb}}{\includegraphics[height=4cm]{Figure_SigmaPhaseModelledPartialOccupancies.png}}
-
+  
+%  \subcaptionbox{\protect\label{fig:PartialOccupanciesA}}{\includegraphics[height=4cm]{Figure_bdpartial_distributions.pdf}}
+%  \subcaptionbox{\protect\label{fig:PartialOccupanciesB}}{\includegraphics[height=4cm]{Figure_bdfull_distributions.pdf}}
+\includegraphics[height=4cm]{Figure_both_distributions.pdf}
   \caption{\protect\label{fig:PartialOccupancies}
-    (\subref{fig:ExptPartialOccupancies}) 
-    (001) view of the σ phase unit cell.
-    Wyckoff sites are encoded in colors: 2a is light blue,
-    4f in grey, 8i in green, 8i' in gold, 8j in blue.
-    (\subref{fig:PartialOccupanciesA}) 
-    First model of unit cell with partial occupancy, model B2\_A3B\_A5B3\_AB7\_A5B3.
-    (\subref{fig:PartialOccupanciesB}) 
-    Further simplified model B2\_A3B2\_A5B3\_8B\_A5B3.
+    First model of unit cell with partial occupancy, right panel shows model B2\_A3B\_A5B3\_AB7\_A5B3 and left pannel 
+    shows the further simplified model B2\_A3B2\_A5B3\_8B\_A5B3.
   }
-
 \end{figure}
 
 \section{Results}
 
-In a full sublattice model, the Fe-Cr \textsigma phase has a tetragonal unit cell in the space group P4\textsubscript{2}/mnm in the entire composition range.  
+In a full sublattice model, the Fe-Cr~\textsigma~phase exhibits a tetragonal unit cell in the space group P4\textsubscript{2}/mnm in the entire composition range.  
 Our results show that partial occupancy disrupts unit cell symmetry, significantly affecting the mechanical response of the \textsigma-phase.  
-Using \textit{spglib}\marginpar{\tiny spglib ref!} as implemented in \textit{ase} \marginpar{\tiny ase ref!}, we find that even before full optimization of the unit cell, the only decoration of the lattice  sites according to the partial occupancy breaks the tetragonal symmetry of the sigma phase.  
+Using \textit{spglib*}~\cite{Spglib_Togo} as implemented in the \textit{atomistic simulation environment}~\cite{HjorthLarsen_2017}, we find that even before full optimization of the unit cell, the only decoration of the lattice  sites according to the partial occupancy breaks the tetragonal symmetry of the sigma phase.  
 \marginpar{\tiny would it be possible that occupancy in 2a recovers symmetry somehow?}
 Upon decoration, all the configurations acquire a triclinic unit cell with space group P1. 
-The cell vector lengths and angles of the triclinic cells are shown in \autoref{fig:Symmetry_angles_caratio} for all the configurations.  
+The cell vector lengths and angles of the optimized triclinic cells are shown in \autoref{fig:Symmetry_angles_caratio} for all the configurations.  
 Although small, the introduced structural variations might affect the mechanical properties of the \textsigma -phase. 
 
 \paragraph{phase stability}
@@ -133,13 +127,47 @@ Although small, the introduced structural variations might affect the mechanical
 \autoref{fig:OccupancyEffect} shows the calculated convex hull for the full occupancy samples and both models with
 partial occupancy. 
 The formation enthalpies of the \textsigma~phase are possitive for all compositions, which indicate that it it could be stabilized by entropy contributions. 
-However, at the composition of interest, introducing partial occupancy stabilizes the phase as several samples have a formation enthalpy below the tie-line of the full-occupancy convex hull. 
+In the other hand, at the composition of interest, introducing partial occupancy stabilizes the phase as several samples have a formation enthalpy below the tie-line of the full-occupancy convex hull. 
+In contrast, the samples at the same composition but with full occupancy lay several hundreds of meV/at avobe the convex hull tie line.
 
 \paragraph{Elastic constants}
 
-Due to the low symmetry, the elastic tensor of the triclinic unit cell has 22 independent components, and their determination is computationally much more demanding than the full occupancy cases, requiring a larger number of DFT calculations.
-Finally, in \autoref{fig:VRHelastic} we report the changes in the VRH averaged elastic moduli with nominal composition and fractional occupation of the sublattices.
-We observe a slight stiffening of the compound for increasing Cr content, which is consistent with experimental findings.
+The elastic tensor of a tetragonal unit cell can be reduced to 6 independent components.
+In Voigt notation~\cite{golesorkhtabar_elastic_2013}:
+
+\begin{equation}
+  \begin{pmatrix}
+    C_{11} & C_{12} & C_{13} & 0 & 0 & 0 \\
+    C_{12} & C_{11} & C_{13} & 0 & 0 & 0 \\
+    C_{13} & C_{13} & C_{33} & 0 & 0 & 0 \\
+    0 & 0 & 0 & C_{44} & 0 & 0 \\
+    0 & 0 & 0 & 0 & C_{44} & 0 \\
+    0 & 0 & 0 & 0 & 0 & C_{66} \\
+  \end{pmatrix}
+\end{equation}
+
+In the other hand, the triclinic unit cell has 22 independent components where none of them is necesarily zero. 
+In consequence, the same amount of parametrized deformations should be applied.
+In addition, for each deformation tensor enough parameters should be applied as to determine each of the elastic tensor components after a least squares fit.
+This makes the determination of the elastic tensor of the non-symmetrical triclinic unit cell unfeasible in the whole configurational space.
+
+ However, we calculated an ad-hoc selection of 25 configurations for each model. 
+ Finally, in \autoref{fig:VRHelastic} we report the changes in the VRH averaged elastic moduli with nominal composition and fractional occupation of the sublattices. 
+ We observe a slight stiffening of the compound for increasing Cr content, which is consistent with experimental findings.
+ However, we do not observe a significant correlation between the deviations and the formation energy.
+
+\begin{figure}
+  \subcaptionbox{\protect\label{fig:ElasticTensorRatios}}{{\includegraphics[height=4cm, trim=1.2cm 0cm 6cm 0cm, clip]{Figure_swarm_allrelations.pdf}}}
+  \subcaptionbox{\protect\label{fig:ElasticTensorMains}}{\includegraphics[height=4cm, trim=0.5cm 0cm 1.7cm 1cm, clip]{Figure_C11_C13_C44_Deviations_on_equals.pdf}}
+  \caption{\protect\label{fig:ResultsElasticConstants} 
+    Comparison between elastic tensor components of the tetragonal, full occupancy (FO) model and the triclinic,
+    partial occupancy (PO) model. 
+    Formation energy of the samples is indicated in color code in units of eV/atom.
+    (\subref{fig:ElasticTensorMains}) relative differences in the triclinic model for components that are equal in the tetragonal model. 
+    (\subref{fig:ElasticTensorRatios}) relative change of the elastic tensor component between the PO samples and FO samples, for non-zero valued constants in the triclinic cell (left). 
+    For the constants that zero in the tetragonal cell, we present the relative change with respect to the largest constant of the tetragonal cell (right).
+  }
+\end{figure}
 
 \begin{figure}
   \subcaptionbox{\protect\label{fig:Symmetry_angles_caratio}}{\includegraphics[height=4cm]{example-image-a}}
@@ -153,9 +181,9 @@ We observe a slight stiffening of the compound for increasing Cr content, which 
  \subcaptionbox{\protect\label{fig:ConvexHull0k}}{\includegraphics[height=4cm]{Figure_FeCrSigmaConvexHull.png}}
  \subcaptionbox{\protect\label{fig:VRHelastic}}{\includegraphics[height=4.5cm]{Figure_VRHAVerages.png}}
  \caption{\protect\label{fig:OccupancyEffect}
-   Effect of occupancy on the stability and properties of the Fe16Cr14 \textsigma-phase.
+  Effect of occupancy on the stability and properties of the Fe\textsubscript{16}Cr\textsubscript{14} \textsigma\-phase.
    (\subref{fig:ConvexHull0k}) Effect on formation enthalpy at 0K.
-   (\subref{fig:ConvexHull0k}) Effect on VRH averaged elastic moduli.
+   (\subref{fig:ConvexHull0k}) Effect on polycrystalline  averaged elastic modulae.
  }
 
 \end{figure}
@@ -166,9 +194,6 @@ For the first time, the properties of this phase are calculated taking into acco
 We demonstrate that partial occupancy significantly influences the mechanical response of the \textsigma-phase, which cannot be captured by the traditional full sublattice models.
 Our results provide new insights into the mechanical behavior of the Fe-Cr \textsigma-phase and highlight the importance of considering partial occupancy in theoretical models.
 
-
-\section{full occupancies}
-
 \section{selection of working alloy}
 final long term goal is CrMnFeCoNi (order by atomic number).
 We select the easiest binary with $\sigma$ phase.
@@ -177,7 +202,9 @@ show experimental partial occupancies, and the modelled distributions.
 (there are slides)
 explaining breaking of symmetry by partial occupancies with figures.
 
+\section*{Acknowledgements} 
 
+This work is a part of the project ”Artificial Intelligence for Intermetallic Materials”–AIIM funded by the Deutsche Forschungsgemeinschaft (DFG No. 505643559). 
 \bibliographystyle{naturemag} \bibliography{main.bib}
 
 \end{document}
