@@ -22,6 +22,12 @@ main.bbl: main.aux main.bib
 main.aux: main.tex Figure*
 	${LATEX} main.tex
 
+PanelFigures: 
+	make -C PanelFigures
+	
+
+
+
 
 
 #Figures: epsfigures
