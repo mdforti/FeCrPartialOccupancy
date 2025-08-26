@@ -1,0 +1,13 @@
+\documentclass{standalone}
+\usepackage{tikz}
+\usetikzlibrary{positioning, calc}
+
+\begin{document}
+
+\begin{tikzpicture}
+  \node[anchor=center, draw] (A) at (0,0) {\includegraphics[height=5cm,  trim=4cm 0cm 5cm 0cm, clip]{Figure_both_distributions_fo.pdf}};
+  \node[anchor=north, draw] (B) at (A.south) {\includegraphics[height=5cm, trim=2cm 0cm 4cm 0cm, clip]{Figure_both_distributions.pdf}};
+\end{tikzpicture}
+
+\end{document}
+
