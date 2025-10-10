@@ -4,6 +4,8 @@ BIB = bibtex
 SUPSOURCES = 
 #Fe-Mo_KernelRidge_learning_curves_tovote.pdf Fe-Mo_MLP_learning_curves_tovote.pdf Fe-Mo_RandomForest_learning_curves_tovote.pdf
 
+all: main.pdf suplementary.pdf PanelFigures
+
 main.pdf: main.aux main.bbl 
 	${LATEX} main.tex
 
@@ -22,8 +24,10 @@ main.bbl: main.aux main.bib
 main.aux: main.tex Figure*
 	${LATEX} main.tex
 
-PanelFigures: 
+PanelFigures:
 	make -C PanelFigures
+
+.PHONY: PanelFigures
 	
 
 

@@ -1,0 +1,40 @@
+\documentclass{standalone}
+\usepackage{tikz}
+\usetikzlibrary{positioning, calc}
+
+\begin{document}
+
+
+
+
+\newcommand{\axes}[2]{ 
+  \begin{tikzpicture}[scale=0.75]
+
+    %    \node[anchor=center] (A) at (0,0) {\includegraphics[height=5cm]{Figure_alfa_gamma_plots.pdf}};
+    % Draw axes
+    \coordinate (O) at (#1,#1);
+    \coordinate (A) at ( $(O) + (#2, 0)$ ) {};
+    \node[anchor=north east] (A_label) at ( $(A.north) + (0.25, 0)$ )  {\tiny $[010]$};
+    \coordinate  (B) at ( $(O) + (0, #2)$ ) {};
+    \node[anchor=south east, rotate=90] (B_label) at ($(B.west) + (0, 0.3)$)  {\tiny $[001]$};
+    \coordinate  (C) at ( $(O) + -sqrt(2)*0.5*(#2, #2)$) {} ;
+    \node[anchor=south west, rotate=45] (C_label) at ($(C.north west) + (-0.3, -0.3)$)  {\tiny $[100]$};
+    \draw ($(O) + (0.4*#2, 0)$) arc (0:90:0.4*#2) node[midway, right=-0.1] {\tiny $\gamma$};
+    \draw ($(O) + (0,0.3*#2 )$) arc (90:225:0.3*#2) node[midway, left=-0.1] {\tiny $\alpha$};
+    %
+    \draw[thick, -latex] (O) -- (A);
+    \draw[thick, -latex] (O) -- (B);
+    \draw[thick, -latex] (O) -- (C);
+    %
+  \end{tikzpicture}
+}
+
+\begin{tikzpicture}
+
+  \node (fig) at (0,0) {\includegraphics[height=5cm, trim=1cm 0 1cm 1cm ]{Figure_alfa_gamma_plots.pdf}};
+  \node (axes) at (-2.75cm, 1.5cm) {\axes{3cm}{1}};
+
+\end{tikzpicture}
+
+\end{document}
+%
