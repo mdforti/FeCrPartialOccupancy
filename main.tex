@@ -27,7 +27,7 @@
 \usepackage{multirow}
 \usepackage{booktabs}
 \usepackage[LGR,T1]{fontenc}
-\usepackage[utf8x]{inputenc}
+\usepackage[utf8]{inputenc}
 \usepackage{textalpha}
 \usepackage{ulem}
 \usepackage{textcomp}
@@ -47,10 +47,13 @@
 \author{Mariano Forti} \email{mariano.forti@icams.rub.de}
 \affiliation{Interdisciplinary centre for advanced materials simulations (ICAMS), Ruhr Universität Bochum, Germany}
 
-\author{Guillaume Laplanche} \email{}
+\author{Guillaume Laplanche} 
 \affiliation{Ruhr Universität Bochum}
 
-\author{Thomas Hammerschmidt} \email{}
+\author{Wenhao Zhang}
+\affiliation{CNRS-Saint-Gobain-NIMS, IRL 3629, Laboratory for Innovative Key Materials and Structures (LINK), 1-1 Namiki, Tsukuba, 305-0044, Ibaraki, Japan}
+
+\author{Thomas Hammerschmidt}
 \affiliation{Interdisciplinary cetre for advanced materials simulations (ICAMS), Ruhr Universität Bochum, Germany}
 
 \date{\today}
@@ -67,19 +70,24 @@ The Fe--Cr system is an important alloy system with applications in structural a
 Here, the \textsigma-phase can form at Cr concentrations between 45 and 50\%at and temperatures ranging from 550 to 800\textdegree ~\cite{laplanche_phase_2018} significantly influencing the mechanical properties.
 Specifically, \textsigma-phase precipitation contributes to embrittlement and reduces corrosion resistance {\color{red}  [ref 2 detrimental sigma] }.
 The \textsigma-phase unit cell is shown in \autoref{fig:sigmaUnitCell}.
-This is an intermetallic compound with a tetragonal structure (space group \textit{P4\textsubscript{2}/mnm}) and exhibits complex atomic arrangements due to site-specific partial occupancies.
+This is an intermetallic compound with a tetragonal structure (space group \textit{P4\textsubscript{2}/mnm}) and exhibits complex atomic arrangements due to site-specific occupancies.
+\MFnew{This gives the \textsigma-phase strong long range order.}
 Understanding its properties is essential for predicting its mechanical behavior and phase stability.
 There are different approaches to similar problems in atomistic simulations, based for instance on Density Functional Theory (DFT).
-Vesti et. al. ~\cite{vesti_ab-initio_2023} utilize a full sublattice model later averaged under an ideal mixing approximation to interpolate the properties of a W-Re \textsigma-phase.
-Kabliman et. al. ~\cite{kabliman_ab_2012} use a mean field approximation to study several properties of the \textsigma-phase in other binary systems, also based on full occupancy of the sublattices.
-This assumption may overlook local atomic configuration effects.
-In this work, we investigate how explicit consideration of partial occupancy influences the elastic properties of the \textsigma-phase through first-principles calculations.
+Vesti et. al. ~\cite{vesti_ab-initio_2023} utilize a  sublattice model later averaged under the compound energy formalism \MFnew{[missing ref]} to interpolate the properties of a W-Re \textsigma-phase.
+Kabliman et. al.\cite{kabliman_ab_2012}
+use a mean field approximation to study several properties of the \textsigma-phase in other binary systems, also based on full occupancy of the sublattices.
+\MFnew{This methodologies were deviced several years ago, when a full study in the composition and configuration space was not plausible0}.
+\MFnew{Their underlying intention was to approximate a disordered structure with a finite set of oredered unit cells}.
+These approximations may overlook local atomic configuration effects.
+In this work, we investigate how explicit consideration of partial occupancy influences the elastic properties of the \textsigma-phase through first-principles and machine learning interatomic potentials calculations.
 We focus on a Fe\textsubscript{16}Cr\textsubscript{14} unit cell which can be modelled with nominal and on-site compositions in agreement with experimental observations.
 
 \begin{figure}
-  \subcaptionbox{\protect\label{fig:sigmaUnitCell}}{\includegraphics[height=4cm]{Figure_SigmaPhase001.png}}
+  \subcaptionbox{\protect\label{fig:sigmaUnitCell001}}{\includegraphics[height=4cm]{Figure_SigmaPhase001.png}}
+  \subcaptionbox{\protect\label{fig:sigmaUnitCell100}}{\includegraphics[height=4cm]{example-image-b}}
   \caption{\protect\label{fig:introduction}
-    (\subref{fig:sigmaUnitCell}) (001) view of the σ phase unit cell.
+    (\subref{fig:sigmaUnitCell001}) (001) and (\subref{fig:sigmaUnitCell100}) (100) views of the \textsigma-phase unit cell.
     Wyckoff sites are encoded in colors: 2\textit{a} is light blue,
     4\textit{f} in grey, 8\textit{i} in green, 8\textit{i'} in gold, 8\textit{j} in blue.
   }
@@ -93,28 +101,71 @@ Then, we focus on a nominal composition of Fe\textsubscript{16}Cr\textsubscript{
 These calculations are conducted using the Vienna Ab initio Simulation Package (VASP) ~\cite{Hafner_vasp}, utilizing the Perdew-Burke-Ernzerhof (PBE) ~\cite{Perdew1996} exchange-correlation functional and the Projector Augmented Wave (PAW) method ~\cite{Bloch1994, kresse_ultrasoft_1999}.
 The elastic tensor is derived from stress-strain relationships obtained via energy-strain calculations~\cite{golesorkhtabar_elastic_2013}.
 \MFnew{
-\paragraph{Magnetic ordering} The \textsigma-phase in the Fe-Cr is stable at high temperatures and and is observed paramagnetic at both high and room temperatures after quenching \MFnewMissRef. Therefore, we calculate elastic constants from non spin polarized calculations only, although the influence of magnetic transitions in mechanical properties will be studied later. 
+\paragraph{Magnetic ordering} The \textsigma-phase in the Fe-Cr is stable at high temperatures and and is observed paramagnetic at both high and room temperatures after quenching \MFnewMissRef. 
+Therefore, we calculate elastic constants from non spin polarized calculations only, although the influence of magnetic transitions in mechanical properties will be studied later. 
 }
 
-\paragraph{Full occupancy}
-
-First, we calculate the properties of the \textsigma-phase using a full sublattice model.
+\paragraph{Full occupancy}\label{methodology:fo} First, we calculate the properties of the \textsigma-phase using a sublattice model.
 This means, that the lattice positions of a WS are occupied either by Cr or Fe.
-We calculate formation enthalpies and elastic constants for all the possible configurations spanning the full composition range.
+This way we calculate  2\textsuperscript{5} = 32 ordered structures. 
+These so-called end-member configurations can be used to find the optimal site occupancy and Gibbs free energy at any finite temperature for any nominal Fe (or Cr) composition $x$ using the compound energy formalism (CEF) ~\cite{dupin_using_2006, crivello_first_2009, zhang_prediction_2025}.
+Here, the occupancy of an element $i$ in a sublattice $s$ is defined in terms of the number of atoms $N_i ^s$ in the sublattice,
 
-\paragraph{Partial occupancy} To capture the impact of atomic disorder, we explicitly explore all possible atomic arrangements within the \textsigma-phase unit cell, incorporating experimentally reported partial occupancy of WS by Yakel~\cite{yakel_atom_1983} as reproduced in \autoref{fig:PartialOccupancies}.  
+\begin{equation}\label{eqn:occupancy}
+  y_i ^s = \dfrac{N_i ^s}{\sum _j N_j ^s}
+\end{equation}
+
+\noindent can be calculated from an optimization problem which minimizes the weighted Gibbs free energy \cite{zhang_prediction_2025}. 
+In this approach, the Gibbs free energy is usually derived from a Gorsky-Bragg-Williams approximation without excess terms\cite{gorsky_rontgenographische_1928,bragg_effect_1997,chizhikov_gorsky-bragg-williams_2000}, 
+
+\begin{align}\label{eqn:CEF}
+  \begin{split}
+    \Delta G(x, T) &= \Delta H(x, T) - T S(x, T) \\
+		   &= \min _{ y_i ^{2a}  \dots y_m ^{8i} } 
+		   \left[  
+		     \sum_{i j k l m = Fe, Cr} {}
+		   \left[  
+                    y_i^{2a} y_j^{4f} y_k^{8i_1} y_l ^{8i_2} y_m ^{8j}
+                   \right] H_{i j k l m} ^0 
+		   + k_B T \sum_s \dfrac{m_s}{N} \sum_i y_i ^s \ln y_i ^s
+	           \right]
+  \end{split}
+\end{align}
+
+\noindent where the indexes $i, j, k, l, m$ run over the elements Fe and Cr for each of the five sublattices. $H_{i j k l m} ^0$ are the formation enthalpies at 0K of the end-member configurations, $m_s$ are the multiplicities of the sublattices $s = 2\textit{a}, \dots 8\textit{j}$ with $m_s = 2, 4, 8, 8, 8$ respectively, and $N$ is the total number of atoms in the unit cell.
+As this is a well established method, we refer to the original literature for further details.
+We calculate the formation enthalpies $\Delta H_{ijklm}^0$ in reference to the stable ground states of Fe and Cr, 
+
+\begin{equation}
+  \Delta H_{i,j,k,l,m}^0 = E_{i,j,k,l,m}^{\sigma} - \left( x_{i,j,k,l,m}^{Fe} E^{Fe}_{0} + x_{i,j,k,l,m}^{Cr} E^{Cr}_{0} \right)
+\end{equation}
+
+\noindent where $E_{i,j,k,l,m}^{\sigma}$  is the total energy of one unit cell of the \textsigma-phase, $E_{Fe}^{0}$ and $E_{Cr}^{0}$ are the energies per atom of Fe and Cr ground states, respectively, and $x_{i,j,k,l,m}^{Fe}$ and $x_{i,j,k,l,m}^{Cr}$ are the atomic fractions of Fe and Cr in the \textsigma-phase unit cell for the specific configuration.
+The ground state of the constituent elements depend on the magnetic state to be considered. 
+\MFnew{For non spin polarized calculations we consider BCC Cr and HCP Fe, while be BCC is the corresponding ground state for both Fe and Cr for spin polarized calculations.
+
+The elastic constants for all end-members are calculated spanning the full composition range.
+}
+
+\paragraph{Partial occupancy}\label{methodology:po} To capture the impact of atomic disorder, we explicitly explore all possible atomic arrangements within the \textsigma-phase unit cell, incorporating experimentally reported partial occupancy of WS by Yakel~\cite{yakel_atom_1983} as reproduced in \autoref{fig:PartialOccupancies}.  
 A random distribution in the different sublattices could be modelled for instance by a special quasirandom structure \MFnew{[SQS ref]} but  this would require a big unit cell to generate a meaningful representation of such atomic distributions, in particular due to the small Cr content in the  2\textit{a} site (< 0.5 atom per unit cell).
 
 In order to keep the size of the simulation cell to one unit cell, we consider two approximations to the partial occupancy, in both cases disregarding Cr occupation in site 2a and rounding occupancy to integer numbers.  
-A first model keeps one Fe atom in the site 4\textit{f} and 1 Cr atom in site 8\textit{i'}.  
-In this condition, the total number of possible configurations is $ 1 \times 4 \times \binom{8}{3}\times \binom{8}{1} \times \binom{8}{3} \approx 100k $. 
-We name this model PO2. % 2\_A3B\_A5B3\_AB7\_A5B3.
-A second model keeps the same number of atoms in the 8\textit{i} and 8\textit{j} sites, while transferring the Cr atom from 8\textit{i'} to 4\textit{f}.  
-We call this other model PO1\MFmarginpar{*}{}{This is the other way around in current plots. Needs to be fixed!}.% B2\_A3B2\_A5B3\_B8\_A5B3. 
-This reduces the number of possible configurations to $1 \times 1 \times \binom{8}{3}\times 1\times\binom {8}{3} = 3136$.~
+A first model keeps full occupancy of Fe in the sites 2\textit{a} and 8\textit{i'}, full Cr occupancy in site 4\textit{f}, but sites 8\textit{i} and 8\textit{j} will have 5 Cr and 3 Fe atoms per unit cell. We name this model PO1. 
+In this condition, the total number of possible configurations is $1 \times 1 \times \binom{8}{3} \times 1 \times \binom{8}{3} = 3136 $, all with the same nominal composition and site occupancy.
+A second further transfers one Cr atom from 4\textit{f} to 8\textit{i'}.
+we call this other model PO2.
+The total number of possible configurations now explodes to $ 1 \times 4 \times \binom{8}{3}\times \binom{8}{1} \times \binom{8}{3} \approx 100k $.
 We choose the explained naming convention according to increasing number of possible configurations.
 In both models, the combinatorial explosion of the number of configurations hinders any extensive estimation of the elastic constants of a significant number of samples from DFT calculations, although in the second model the number of configurations is significantly reduced and approaching statistical significance would be easier.
 
+\MFnew{
+In comparison to these partial occupancy models, a sublattice model of the nominal composition of intersest would have a very different site occpancy. 
+As show in \autoref{fig:PartialOccupancies}, there are three possible configurations with nominal composition Fe16Cr14 ($\approx$ 0.53at\% Fe). 
+All of them have site 2\textit{a} filled wih Cr instead of Fe. 
+In addition, only one of the 8\textit{i}, 8\textit{i'} and 8\textit{j} sites would have Cr. 
+This configuration might greatly destabilize the unit cell.
+}
 
 \begin{figure}[h!]
   
@@ -127,10 +178,21 @@ In both models, the combinatorial explosion of the number of configurations hind
   }
 \end{figure}
 
+\paragraph{MLIP}
+
+\MFnew{In recent years, universal force fields based on machine learning potentials have gained increasing attention. 
+They are MLIPs fitted on massive DFT force-energy surface databases which have been progressively designed in order to improve the final  UFF accuracy. 
+They allow for efficient use of computational resources to speed up calculations with high accuracy compared to DFT, and seem like a perfect tool for the task of scanning the high volume configurational space in the problem we present here.
+However, the calculation of complex properties like the elastic tensor and the complex atomic environment in the \textsigma-phase may pose a challenge for this tools.
+}
+
+\vspace{1cm}
+\MFnew{fine tuning or fitting as complementary tool}
+\vspace{1cm}
 
 Here we propose a combined DFT / machine learning interatomic potential (MLIP) approach to reduce the combinatorial sampling to the most relevant configurations, i.e. those with the lowest formation enthalpy.
 As a first step, we select a subset of 25 representative configurations of each model and calculate their optimized unit cell and their elastic constants using DFT. 
-We extend the resulting dataset to build a a specialized Fe-Cr \textsigma-phase DFT dataset is consisting of 
+We extend the resulting dataset to build a a specialized Fe-Cr \textsigma-phase DFT dataset consisting of 
 
 \begin{itemize}
 	\item the relaxation path of all the full-occupancy samples,
@@ -142,26 +204,71 @@ We extend the resulting dataset to build a a specialized Fe-Cr \textsigma-phase 
 
 
 
-\section{Results}
+\section{Results}\label{sec:Results}
 
-In a full sublattice model, the Fe-Cr~\textsigma--phase exhibits a tetragonal unit cell in the space group P4\textsubscript{2}/mnm in the entire composition range.  
+In the sublattice model, the Fe-Cr~\textsigma--phase exhibits a tetragonal unit cell in the space group P4\textsubscript{2}/mnm in the entire composition range.  
 Our results show that partial occupancy disrupts unit cell symmetry, potentially affecting the mechanical response of the \textsigma--phase.  
 Using \textit{spglib*}~\cite{Spglib_Togo} as implemented in the \textit{atomistic simulation environment}~\cite{HjorthLarsen_2017}, we find that even before full optimization of the unit cell, the only decoration of the lattice  sites according to the partial occupancy breaks the tetragonal symmetry of the sigma phase.  
 \MFmarginpar{*}{}{would it be possible that occupancy in 2a recovers symmetry somehow?}
 Upon decoration, all the configurations acquire a triclinic unit cell with space group \textit{P1}. 
-The cell vector lengths\MFmarginpar{**}{}{This is still missing} and angles of the optimized triclinic cells are shown in \autoref{fig:SymmetryConsiderations}\MFmarginpar{***}{}{include the axis with angles to demonstrate} for all the configurations.  
+The cell vector lengths\MFmarginpar{**}{}{This is still missing} and angles of the optimized triclinic cells are shown in \autoref{fig:SymmetryConsiderations} for all the configurations.  
 Although small, the introduced structural variations might affect the mechanical properties of the \textsigma-phase. 
+In \autoref{subfig:FormationEnergies} we show the results from the CEF in comparison to the calculated partial occupancy samples. 
 
 \begin{figure}[H]
-  \subcaptionbox{\protect\label{subfig:angle_symmetry_rupture}}{\fbox{\includegraphics[height=4cm, trim=0.5cm -1cm 0.5cm 0cm, clip]{Figure_alfa_gamma_plots.pdf}}} %
-  \subcaptionbox{\protect\label{subfig:FormationEnergies}}{\includegraphics[height=5cm, trim=0cm 0.9cm 0cm 1cm]{Figure_ConvexHull0K.pdf}}
+  \subcaptionbox{\protect\label{subfig:angle_symmetry_rupture}}{\fbox{\includegraphics[height=4.5cm, trim=0.5cm -0.25cm 0.5cm -0.25cm, clip]{Figure_alfa_gamma_plots.pdf}}} %
+  \subcaptionbox{\protect\label{subfig:FormationEnergies}}{\includegraphics[height=5cm, trim=0cm 0.9cm 0cm 1cm]{Figure_ConvexHull_gibbs.pdf}}
   \caption{
     \protect\label{fig:SymmetryConsiderations}
     Effect of partial occupancy on unit cell geometry and stability. 
     (\autoref{subfig:angle_symmetry_rupture}) Distribution of $\alpha$ and $\gamma$ angles for models with partial occupancy after full optimization with DFT. 
     (\autoref{subfig:FormationEnergies}) Formation enthalpy at 0K for the full occupancy model and the two models with partial occupancy.
+    Arrows indicate the formation enthalpies for the sublattice model samples with nominal composition 53at\%Fe. 
+    Gibbs free energies as obtained from the CEF at 0 and 873K are overimposed. 
     }
 \end{figure}
+
+The formation enthalpies of the PO1 set approaches the Gibbs free energies from the CEF at 0K, even for our limited selection of samples, and to the moment we dont find any sample with energies below this limit. 
+In the other hand, the CEF at 873K shows a first crossing of the $\Delta E_f$ = 0 limit of stability, although the compositions are still shifted towards the Cr rich region. 
+This might be due to the lack of electronic and vibrational contributions to he Gibbs free energies.
+Those aspects might be studied in future works. 
+
+\paragraph{fitting of GRACE}
+After this first the DFT calculations set (DFT0) we fit a GRACE \MFnewMissRef potential.
+Here we intend to use this potential in a screening tool to scan the full configurational space and select the most relevant configurations for further DFT calculations, but it does not necesarilly need to be highly accurate. 
+The DFT extended DFT dataset is ilustrated in \autoref{fig:DFTDataset}, while the final potential performance is reported in \autoref{tab:MLIPPerformance}.
+
+
+\begin{figure}[H]
+  \subcaptionbox{~}{\includegraphics[height=6cm]{Figure_DFTDataset.pdf}}
+  \subcaptionbox{~}{\includegraphics[height=6cm]{Figure_Workflow.pdf}}
+  \caption{
+    \protect\label{fig:DFTDataset}
+    (a) DFT dataset used to train the MLIP. 
+    The dataset includes unary unit cells, random deformations, and elastic constant calculations. 
+    The energy - NN relationship is shown in the right panel.
+}
+\end{figure}
+
+
+\begin{table}
+
+  \caption{\protect\label{tab:MLIPPerformance} Performance of the GRACE potential in approximating DFT energies, forces and stresses. 
+		The performance is shown for the training set (Train) and a testing set (Test) and finally a validation set (Validation).
+		The mean absolute error (MAE) and root mean square error (RMSE) are shown for each target variable.
+	}
+	\begin{tabular}{lrrrrrr}
+		\toprule
+		      & \multicolumn{2}{c}{Energy [meV/at]} & \multicolumn{2}{c}{Forces [eV/\AA]} & \multicolumn{2}{c}{Stresses [GPa]} \\
+		      & MAE   & RMSE  & MAE   & RMSE  & MAE   & RMSE \\
+		\midrule
+	       Train &  5    &  30     &  0.005  & 0.01 & 0.008   & 0.03 \\
+		Test & 10    &  90   &0. 01  & 0.02  & 0.01   & 0.025 \\
+		Val   & \MFnew{Missing}   & \MFnew{Missing}   & \MFnew{Missing}  & \MFnew{Missing}  & \MFnew{Missing}  &  \MFnew{Missing}\\
+		\bottomrule
+	\end{tabular}%
+
+\end{table}
 
 \paragraph{phase stability}\MFmarginpar{*}{}{include validation point}
 The calculated convex hull for the full occupancy samples and both models with partial occupancy is shown in \autoref{subfig:FormationEnergies}. 
@@ -191,29 +298,6 @@ In consequence, the same amount of parametrized deformations should be applied.
 In addition, for each deformation tensor enough parameters should be applied as to determine each of the elastic tensor components after a least squares fit.
 This makes the determination of the elastic tensor of the non-symmetrical triclinic unit cell unfeasible in the whole configurational space.
 
-\paragraph{fitting of GRACE}
-After this first the DFT calculations set (DFT0) we fit a GRACE \MFnewMissRef potential.
-Here we intend to use this potential in a screening tool to scan the full configurational space and select the most relevant configurations for further DFT calculations, but it does not necesarilly need be highly accurate. 
-The fitting performance is shown in a table.
-
-\begin{table}
-
-  \caption{\protect\label{tab:MLIPPerformance} Performance of the GRACE potential in approximating DFT energies, forces and stresses. 
-		The performance is shown for the training set (Train) and a testing set (Test) and finally a validation set (Validation).
-		The mean absolute error (MAE) and root mean square error (RMSE) are shown for each target variable.
-	}
-	\begin{tabular}{lrrrrrr}
-		\toprule
-		      & \multicolumn{2}{c}{Energy [meV/at]} & \multicolumn{2}{c}{Forces [eV/\AA]} & \multicolumn{2}{c}{Stresses [GPa]} \\
-		      & MAE   & RMSE  & MAE   & RMSE  & MAE   & RMSE \\
-		\midrule
-	       Train &  {}    & {}     &  {}  & {}  & {}   & {} \\
-		Test & 10    &  90   &0. 01  & 0.02  & 0.01   & 0.025 \\
-		Val   & 2.4   & 3.6   & 0.13  & 0.19  & 0.4   & 0.6 \\
-		\bottomrule
-	\end{tabular}%
-
-\end{table}
 
 \begin{figure}[h!]
 
@@ -228,7 +312,7 @@ The fitting performance is shown in a table.
 \end{figure}
 
 \paragraph{Elastic moduli including validation set}
- In \autoref{fig:OccupancyEffect}\MFmarginpar{*}{}{include equations, change to plot with validation points} we report the changes in the VRH \MFnewMissRef polycristalline elastic moduli with nominal composition and fractional occupation of the sublattices and its relation to formation energy.
+ In \autoref{fig:OccupancyEffect}\MFmarginpar{*}{}{include equations, change to plot with validation points} we report the changes in the polycristalline elastic moduli\MFnewMissRef with nominal composition and fractional occupation of the sublattices and its relation to formation energy.
  First, the results for the FO samples clearly show the stiffening of the compound with increasing stability which can be expected in relation to deeper energy surfaces.
  We also see that the PO samples follow the same trend.
  A slight stiffening of the compound is already displayed for the small DFT dataset.
@@ -253,13 +337,13 @@ The fitting performance is shown in a table.
 %  \fbox{\includegraphics[width=0.7\linewidth, trim=18cm 0cm 6cm 0cm, clip]{Figure_swarm_allrelations.pdf}}
 %}
    \subcaptionbox{\protect\label{fig:ElasticTensorMains}}{
-     \fbox{\includegraphics[height=5cm, trim = 1cm 0 1cm 1cm, clip]{Figure_C11_C13_C44_Deviations_on_equals.pdf}}
+     \fbox{\includegraphics[height=5cm, trim = 0cm 0 3.5cm 1cm, clip]{Figure_C11_C13_C44_Deviations_on_equals.pdf}}
    }
    \subcaptionbox{\protect\label{fig:ElasticTensorNozero}}{
-     \fbox{\includegraphics[height=5cm, trim = 1cm 0 1cm 1cm, clip]{Figure_swarm_nonzero.pdf}}
+     \fbox{\includegraphics[height=5cm, trim = 1.5cm 0 4cm 1cm, clip]{Figure_swarm_nonzero.pdf}}
    }
    \subcaptionbox{\protect\label{fig:ElasticTensorZero}}{
-     \fbox{\includegraphics[width=\linewidth, trim = 0.5cm 1cm 0.5cm 0.5cm, clip]{Figure_swarm_arezero.pdf}}
+     \fbox{\includegraphics[width=\linewidth, trim = 4cm 0cm 12cm 1cm, clip]{Figure_swarm_arezero.pdf}}
    }
   \caption{\protect\label{fig:ResultsElasticConstants} 
     Comparison between elastic tensor components of the tetragonal, full occupancy (FO) model and the triclinic,
@@ -271,44 +355,48 @@ The fitting performance is shown in a table.
   }
 \end{figure}\MFmarginpar{*}{}{Which FO sample?}
 
-\subsection{Machine learning extension of the sample space}
 
-So far, we gained an approximated idea of the effect of partial occupancy on the elastic constants of the Cr--Fe \textsigma ~ phase.
-However, the configuration space is only partially explored, and the 50 samples chosen for explicit elastic constant calculations is probably far from being statistically significant for the around 100k samples of the full configurational space. 
+ \begin{figure}[H]
+%  \subcaptionbox{\protect\label{fig:ElasticTensorMains}}{
+%  \fbox{\includegraphics[height=5cm, trim=0.5cm -1cm 1cm 0cm, clip]{Figure_C11_C13_C44_Deviations_on_equals.pdf}}
+%}
+%  \subcaptionbox{\protect\label{fig:ElasticTensorRatios}}{
+%  \fbox{\includegraphics[height=5cm, trim=1.5cm 0cm 31cm -1cm, clip]{Figure_swarm_allrelations.pdf}}
+%}
+%
+ % \subcaptionbox{\protect\label{fig:ElasticTensorRatios}}{
+%  \fbox{\includegraphics[width=0.7\linewidth, trim=18cm 0cm 6cm 0cm, clip]{Figure_swarm_allrelations.pdf}}
+%}
+   \subcaptionbox{\protect\label{fig:DiffMainsCEF}}{
+     \fbox{\includegraphics[height=5cm, width=0.3\textwidth]{example-image-a}}
+   }
+   \subcaptionbox{\protect\label{fig:ElasticTensorNozeroCEF}}{
+     \fbox{\includegraphics[height=5cm, width=0.6\textwidth]{example-image-b}}
+   }
+   \subcaptionbox{\protect\label{fig:ElasticTensorZeroCEF}}{
+     \fbox{\includegraphics[height=5cm, width=\textwidth]{example-image-c}}
+   }
+  \caption{\protect\label{fig:ResultsElasticConstantsCEF} 
+    Comparison between elastic tensor components of the tetragonal, CEF average (CEF) model and the triclinic,
+    partial occupancy (PO) model. 
+    Formation energy of the samples is indicated in color code in units of eV/atom.
+    () relative differences in the triclinic model for components that are equal in the tetragonal model. 
+    () relative change of the elastic tensor component between the PO samples and FO sample, for non-zero valued constants in the triclinic cell (left). 
+    For the constants that zero in the tetragonal cell, we present the relative change with respect to the largest constant of the tetragonal cell (right).
+  }
+\end{figure}\MFmarginpar{*}{}{Which FO sample?}
 
-At the same time, the already performed calculations can give us valuable information about the compound after symmetry has been broken by partial occupancy. 
-Valuable information about force-stress-displacement relationships can be extracted from the already performed DFT calculations which can be used to train a machine learning interatomic potential (MLIP) with a high degree of specificity. 
-In this direction, we extend our DFT dataset by including not only optimization and elastic constnats calculations already analyzed, but also nearest neighbour (NN) expansions of the bcc, fcc, and hcp unary unit cells of the constitutents (Fe and Cr) and random deformations including isotropic compresion and expansions and atom-position shaking.
-The calculaton cost of this extension is much lower than the explicit calculation of elastic constants for probably hundreds of samples in the combinatorial exploration.
-The resulting energy - NN relationship is shown in \autoref{fig:DFTDataset}.
-We perform a ACE\MFnew{[ref ACE]} potential fitting using python-ace\MFnew{[ref pace]} package.
-The distributions of the target variables (energies, forces, stresses) are shown in the supplementary material, as well as the fitting detapace.
-
-The final potential can approximate our DFT formation energies with a relatively low error, as shown in \MFnew{Figure}.
-
-\begin{figure}[H]
-  \subcaptionbox{~}{\includegraphics[width=0.5\textwidth]{Figure_DFTDataset.pdf}}
-  \subcaptionbox{~}{\includegraphics[width=0.5\textwidth]{example-image-a}}
-  \caption{
-    \protect\label{fig:DFTDataset}
-    (a) DFT dataset used to train the MLIP. 
-    The dataset includes unary unit cells, random deformations, and elastic constant calculations. 
-    The energy - NN relationship is shown in the right panel.
-    (b) Evolution of MLP perfprmance during fitting process.
-}
-\end{figure}
-
-\begin{figure}
-
-  \caption{\protect\label{fig:MLIPPrediction}
-    (a) Comparison between DFT and MLIP formation energies for the Fe-Cr \textsigma~phase. 
-    The lower pannel shows the distribution of the DFT formation energies on the PO samples (1 and 2) from DFT.
-    Upper panel shows GRACE potential predictions for same PO samples. 
-    (b) Parity plot between DFT and GRACE predictions including FO and PO samples. 
-    The vertical line indicates the energy value of the convex hull tie line at Fe\textsubscript{16}Cr\textsubscript{14} composition.
-	}
-
-\end{figure}
+%\begin{figure}
+%
+%  \caption{\protect\label{fig:MLIPPrediction}
+%    (a) Comparison between DFT and MLIP formation energies for the Fe-Cr \textsigma~phase. 
+%    The lower pannel shows the distribution of the DFT formation energies on the PO samples (1 and 2) from DFT.
+%    Upper panel shows GRACE potential predictions for same PO samples. 
+%    (b) Parity plot between DFT and GRACE predictions including FO and PO samples. 
+%    The vertical line indicates the energy value of the convex hull tie line at Fe\textsubscript{16}Cr\textsubscript{14} composition.
+%	}
+%
+%\end{figure}
 
 \section{Conclusion}
 
@@ -328,6 +416,8 @@ explaining breaking of symmetry by partial occupancies with figures.
 \section*{Acknowledgements} 
 
 This work is a part of the project ”Artificial Intelligence for Intermetallic Materials”–AIIM funded by the Deutsche Forschungsgemeinschaft (DFG No. 505643559). 
-\bibliographystyle{naturemag} \bibliography{main.bib}
+
+%\bibliographystyle{naturemag} 
+\bibliography{main.bib}
 
 \end{document}

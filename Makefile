@@ -1,35 +1,57 @@
-LATEX = pdflatex 
-BIB = bibtex
-
-SUPSOURCES = 
-#Fe-Mo_KernelRidge_learning_curves_tovote.pdf Fe-Mo_MLP_learning_curves_tovote.pdf Fe-Mo_RandomForest_learning_curves_tovote.pdf
+LATEX=pdflatex
+BIB=bibtex
 
 all: main.pdf suplementary.pdf PanelFigures
 
-main.pdf: main.aux main.bbl 
-	${LATEX} main.tex
+main.pdf: main.tex main.bbl
+	$(LATEX) main.tex
+	$(LATEX) main.tex
 
-main.aux: main.tex suplementary.aux main.bbl
-	${LATEX} main.tex
+main.bbl: main.aux
+	$(BIB) main
 
-suplementary.pdf: suplementary.aux
-	${LATEX} suplementary.tex 
+main.aux: main.tex main.bib
+	$(LATEX) main.tex
 
-suplementary.aux: suplementary.tex main.bbl ${SUPSOURCES}
-	${LATEX} suplementary.tex 
-
-main.bbl: main.aux main.bib
-	${BIB} main.aux
-
-main.aux: main.tex Figure*
-	${LATEX} main.tex
+suplementary.pdf: suplementary.tex main.bbl
+	$(LATEX) suplementary.tex
+	$(LATEX) suplementary.tex
 
 PanelFigures:
 	make -C PanelFigures
 
 .PHONY: PanelFigures
-	
 
+#LATEX = pdflatex 
+#BIB = bibtex
+#
+#SUPSOURCES = 
+##Fe-Mo_KernelRidge_learning_curves_tovote.pdf Fe-Mo_MLP_learning_curves_tovote.pdf Fe-Mo_RandomForest_learning_curves_tovote.pdf
+#
+#all: main.pdf suplementary.pdf PanelFigures
+#
+#main.pdf: main.aux main.bbl 
+#	${LATEX} main.tex
+#	${LATEX} main.tex
+#
+#main.aux: main.tex suplementary.aux Figure* # main.bbl
+#	${LATEX} main.tex
+#
+#suplementary.pdf: suplementary.aux
+#	${LATEX} suplementary.tex 
+#
+#suplementary.aux: suplementary.tex main.bbl ${SUPSOURCES}
+#	${LATEX} suplementary.tex 
+#
+#main.bbl: main.aux main.bib
+#	${BIB} main
+#
+#PanelFigures:
+#	make -C PanelFigures
+#
+#.PHONY: PanelFigures
+#	
+#
 
 
 
