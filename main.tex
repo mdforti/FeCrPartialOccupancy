@@ -342,9 +342,6 @@ Horizontal and vertical broken lines indicate the CEF formation enthalpy at 0K.
 %TODO: compare elastic constants to CEF
 %TODO: estimation of errors
 
-\paragraph{Elastic moduli including validation set}
-
-%TODO: include isotropic elastic moduli from CEF
 
 Samples from the sublattice model retain the tetragonal symmetry of the \textsigma-phase unit cell after full optimization, as expected. 
 The elastic tensor of a tetragonal unit cell can be reduced to 6 independent components.
@@ -407,22 +404,22 @@ Finally, for the set of elements which are zero in the tetragonal elastic tensor
 \end{equation}
 Notice that in all the definitions we take the elastic components from the CEF result in equation \eqref{cefcij} as reference.
 
- \begin{figure}[H]
+ \begin{figure}[h!]
    \subcaptionbox{\protect\label{fig:ElasticTensorMains}}{
-     \fbox{\includegraphics[height=5cm, trim = 0cm 0 3.5cm 1cm, clip]{Figure_C11_C13_C44_Deviations_on_equals.pdf}}
+     \fbox{\includegraphics[height=5cm]{Figure_ratios_rijkl.pdf}}
    }
    \subcaptionbox{\protect\label{fig:ElasticTensorNozero}}{
-     \fbox{\includegraphics[height=5cm, trim = 1.5cm 0 4cm 1cm, clip]{Figure_swarm_nonzero.pdf}}
+     \fbox{\includegraphics[height=5cm]{Figure_Deviations_nonzero.pdf}}
    }
+
    \subcaptionbox{\protect\label{fig:ElasticTensorZero}}{
-     \fbox{\includegraphics[width=\linewidth, trim = 4cm 0cm 12cm 1cm, clip]{Figure_swarm_arezero.pdf}}
+     \fbox{\includegraphics[height=5cm]{Figure_deviations_arezero.pdf}}
    }
   \caption{\protect\label{fig:ResultsElasticConstants} 
   Deviations in the elastic tensor components in the partial occupancy (PO) samples in comparison to the elastic tensor of the tetragonal lattice as a result from the CEF average from equation \eqref{cefcij}.
-    Formation energy of the samples is indicated in color code in units of eV/atom.
     (\subref{fig:ElasticTensorMains}) Ratios between PO components that are equal in CEF, \eqref{eqn:ratios}.
-    (\subref{fig:ElasticTensorRatios}) relative change of the elastic tensor component between the PO samples and CEF average for non-zero valued constants in the latter, \eqref{eqn:deviatiosnonzero}. 
-    Values of the elastic tensor components where the corresponding components in the CEF result are zero.
+    (\subref{fig:ElasticTensorNozero}) relative change of the elastic tensor component between the PO samples and CEF average for non-zero valued constants in the latter, \eqref{eqn:deviatiosnonzero}. 
+    (\subref{fig:ElasticTensorZero}) Values of the elastic tensor components where the corresponding components in the CEF result are zero.
   }
 
   %TODO: change elastic constants comparison to violin plots
@@ -430,8 +427,12 @@ Notice that in all the definitions we take the elastic components from the CEF r
 \end{figure}\MFmarginpar{*}{}{Which FO sample?}
 
 
+\paragraph{Elastic moduli including validation set}
 
- In \autoref{fig:OccupancyEffect}\MFmarginpar{*}{}{include equations, change to plot with validation points} we report the changes in the polycristalline elastic moduli\MFnewMissRef with nominal composition and fractional occupation of the sublattices and its relation to formation energy.
+%TODO: include isotropic elastic moduli from CEF
+%TODO: include equations for isotropic
+
+ In \autoref{fig:OccupancyEffect} we report the changes in the polycristalline elastic moduli\MFnewMissRef with nominal composition and fractional occupation of the sublattices and its relation to formation energy.
  First, the results for the FO samples clearly show the stiffening of the compound with increasing stability which can be expected in relation to deeper energy surfaces.
  We also see that the PO samples follow the same trend.
  A slight stiffening of the compound is already displayed for the small DFT dataset.
@@ -445,35 +446,6 @@ Notice that in all the definitions we take the elastic components from the CEF r
 
 
 
- \begin{figure}[H]
-%  \subcaptionbox{\protect\label{fig:ElasticTensorMains}}{
-%  \fbox{\includegraphics[height=5cm, trim=0.5cm -1cm 1cm 0cm, clip]{Figure_C11_C13_C44_Deviations_on_equals.pdf}}
-%}
-%  \subcaptionbox{\protect\label{fig:ElasticTensorRatios}}{
-%  \fbox{\includegraphics[height=5cm, trim=1.5cm 0cm 31cm -1cm, clip]{Figure_swarm_allrelations.pdf}}
-%}
-%
- % \subcaptionbox{\protect\label{fig:ElasticTensorRatios}}{
-%  \fbox{\includegraphics[width=0.7\linewidth, trim=18cm 0cm 6cm 0cm, clip]{Figure_swarm_allrelations.pdf}}
-%}
-   \subcaptionbox{\protect\label{fig:DiffMainsCEF}}{
-     \fbox{\includegraphics[height=5cm, width=0.3\textwidth]{example-image-a}}
-   }
-   \subcaptionbox{\protect\label{fig:ElasticTensorNozeroCEF}}{
-     \fbox{\includegraphics[height=5cm, width=0.6\textwidth]{example-image-b}}
-   }
-   \subcaptionbox{\protect\label{fig:ElasticTensorZeroCEF}}{
-     \fbox{\includegraphics[height=5cm, width=\textwidth]{example-image-c}}
-   }
-  \caption{\protect\label{fig:ResultsElasticConstantsCEF} 
-    Comparison between elastic tensor components of the tetragonal, CEF average (CEF) model and the triclinic,
-    partial occupancy (PO) model. 
-    Formation energy of the samples is indicated in color code in units of eV/atom.
-    () relative differences in the triclinic model for components that are equal in the tetragonal model. 
-    () relative change of the elastic tensor component between the PO samples and FO sample, for non-zero valued constants in the triclinic cell (left). 
-    For the constants that zero in the tetragonal cell, we present the relative change with respect to the largest constant of the tetragonal cell (right).
-  }
-\end{figure}\MFmarginpar{*}{}{Which FO sample?}
 
 %\begin{figure}
 %

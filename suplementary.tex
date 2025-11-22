@@ -48,4 +48,61 @@ around the results/intro
 
 \maketitle
 
+\section{Results}
+
+\subsection{Swarm plots of $C_{ij}$ deviations and correlation to formation energy}
+
+
+\begin{figure}
+
+   \subcaptionbox{\protect\label{fig:ElasticTensorMainsSW}}{
+     \fbox{\includegraphics[height=5cm, trim = 0cm 0 3.5cm 1cm, clip]{Figure_C11_C13_C44_Deviations_on_equals.pdf}}
+   }
+   \subcaptionbox{\protect\label{fig:ElasticTensorNozeroSW}}{
+     \fbox{\includegraphics[height=5cm, trim = 1.5cm 0 4cm 1cm, clip]{Figure_swarm_nonzero.pdf}}
+   }
+   \subcaptionbox{\protect\label{fig:ElasticTensorZeroSW}}{
+     \fbox{\includegraphics[width=\linewidth, trim = 4cm 0cm 12cm 1cm, clip]{Figure_swarm_arezero.pdf}}
+   }
+  \caption{\protect\label{fig:ResultsElasticConstantsSW} 
+  Deviations in the elastic tensor components in the partial occupancy (PO) samples in comparison to the elastic tensor of the tetragonal lattice as a result from the CEF average from equation \eqref{cefcij}.
+    Formation energy of the samples is indicated in color code in units of eV/atom.
+    (\subref{fig:ElasticTensorMains}) Ratios between PO components that are equal in CEF, \eqref{eqn:ratios}.
+    (\subref{fig:ElasticTensorRatios}) relative change of the elastic tensor component between the PO samples and CEF average for non-zero valued constants in the latter, \eqref{eqn:deviatiosnonzero}. 
+    Values of the elastic tensor components where the corresponding components in the CEF result are zero.
+  }
+
+\end{figure}
+
+ \begin{figure}
+%  \subcaptionbox{\protect\label{fig:ElasticTensorMains}}{
+%  \fbox{\includegraphics[height=5cm, trim=0.5cm -1cm 1cm 0cm, clip]{Figure_C11_C13_C44_Deviations_on_equals.pdf}}
+%}
+%  \subcaptionbox{\protect\label{fig:ElasticTensorRatios}}{
+%  \fbox{\includegraphics[height=5cm, trim=1.5cm 0cm 31cm -1cm, clip]{Figure_swarm_allrelations.pdf}}
+%}
+%
+ % \subcaptionbox{\protect\label{fig:ElasticTensorRatios}}{
+%  \fbox{\includegraphics[width=0.7\linewidth, trim=18cm 0cm 6cm 0cm, clip]{Figure_swarm_allrelations.pdf}}
+%}
+   \subcaptionbox{\protect\label{fig:DiffMainsCEF}}{
+     \fbox{\includegraphics[height=5cm, width=0.3\textwidth]{example-image-a}}
+   }
+   \subcaptionbox{\protect\label{fig:ElasticTensorNozeroCEF}}{
+     \fbox{\includegraphics[height=5cm, width=0.6\textwidth]{example-image-b}}
+   }
+   \subcaptionbox{\protect\label{fig:ElasticTensorZeroCEF}}{
+     \fbox{\includegraphics[height=5cm, width=\textwidth]{example-image-c}}
+   }
+  \caption{\protect\label{fig:ResultsElasticConstants} 
+    Comparison between elastic tensor components of the tetragonal, CEF average (CEF) model and the triclinic,
+    partial occupancy (PO) model. 
+    Formation energy of the samples is indicated in color code in units of eV/atom.
+    () relative differences in the triclinic model for components that are equal in the tetragonal model. 
+    () relative change of the elastic tensor component between the PO samples and FO sample, for non-zero valued constants in the triclinic cell (left). 
+    For the constants that zero in the tetragonal cell, we present the relative change with respect to the largest constant of the tetragonal cell (right).
+  }
+\end{figure}
+
+
 \end{document}
