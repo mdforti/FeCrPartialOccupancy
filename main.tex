@@ -68,6 +68,20 @@
 
 \date{\today}
 
+
+\begin{abstract}
+The Fe–Cr \textsigma-phase forms in alloys with about 45–50 at.\% Cr at intermediate temperatures and can strongly affect their mechanical performance. 
+Atomistic studies usually assume full sublattice occupation, but experiments show that several Wyckoff sites are only partially occupied, creating many possible local atomic configurations.
+This configurational complexity limits direct first-principles sampling and leaves open questions about how partial occupancy influences the elastic properties of the σ-phase.
+
+We address this problem using a combination of density functional theory and machine learning interatomic potentials for a Fe\textsubscript{16}Cr\textsubscript{14} composition that matches experimental site occupancies. 
+We screen all possible configurations of the disordered intermetallic based on formation energy and validate the predicted relative stability and mechanical properties with DFT calculations of a representative selection of configurations. This approach enables a direct comparison between the traditional sublattice model and models that include explicit disorder at the atomic level.
+
+Our results show that partial occupancy stabilizes the \textsigma-phase but lowers the symmetry of the unit cell from tetragonal to triclinic.
+The calculated elastic tensors differ by roughly 10\% from those predicted by symmetry-preserving models. These findings provide a clearer picture of how local chemical disorder affects the mechanical response of the \textsigma-phase and highlight the importance of including explicit configurational effects when modeling complex intermetallic compounds.
+
+\end{abstract}
+
 \maketitle
 
 \section{Introduction}
@@ -143,6 +157,9 @@ In particular for \textsigma-phase,
 \end{align}
 
 \noindent where the indexes $i, j, k, l, m$ run over the elements Fe and Cr for for the sublattices \siteA, \siteB,  \siteC, \siteD~and \siteE~respectively.
+\MFnew{
+In eq 2, the temperature dependence of the enthalpy variation arises from that of the site occupancies (e.g., $y_i ^{2a}$), while $H^0_{ijklm}$ is calculated at 0K and temperature independent.
+}
 The compound index \textit{\ijklm} identifies a particular end member with a given configuration. 
 $H_{i j k l m} ^0$ are the formation enthalpies at 0K of such configuraition, $m_s$ are the multiplicities of the sublattices \siteA \ldots \siteE~with $m_s = 2, 4, 8, 8, 8$ respectively, and $N$ is the total number of atoms in the unit cell.
 As this is a well established method, we refer to the original literature for further details.
@@ -270,6 +287,7 @@ However, experimental occupancy is about 10\% lower in both sites, which is comp
   \subcaptionbox{\protect\label{subfig:CEF_Occupancy}}{\includegraphics[height=5cm]{Figure_CEF_results_occupancy.pdf}}
   \caption{
     \protect\label{fig:SymmetryConsiderations}
+    \MFnew{ Maybe split d into low and high temp}
     Effect of partial occupancy on unit cell geometry and stability. 
     (\subref{subfig:angle_symmetry_rupture}) Distribution of $\alpha$ and $\gamma$ angles for models with partial occupancy after full optimization with DFT. 
     (\subref{subfig:lattice_parameters}) Distribution of $\alpha$ and $\gamma$ angles for models with partial occupancy after full optimization with DFT. 
@@ -292,7 +310,7 @@ The DFT extended dataset is ilustrated in \autoref{fig:potential_dft_compare} to
 %TODO: comment on parity plot
 
 \begin{figure}[t!]
-  \subcaptionbox{\protect\label{subfig:extended_dft_dtaset}\MFnew{Missing HCP}}{\includegraphics[height=5cm]{Figure_DFTDataset.pdf}}
+  \subcaptionbox{\protect\label{subfig:extended_dft_dtaset}}{\includegraphics[height=5cm]{Figure_DFTDataset_corrected_fromuber_winset.pdf}}
 \subcaptionbox{\protect\label{subfig:dft_mlip_workflow}}{\includegraphics[height=5cm]{Figure_Workflow.pdf}}
 %
 \subcaptionbox{\protect\label{subfig:MLIPPrediction}}{
@@ -397,7 +415,7 @@ Then, for those elements which are different than zero in the tetragonal elastic
 \Delta^{\neq 0} _{IJ} = \dfrac{C_{IJ}^{PO} - C_{IJ}^{CEF}}{C_{IJ}^{CEF}}, \qquad C_{IJ}^{CEF} \neq 0
 \end{equation}
 
-Finally, for the set of elements which are zero in the tetragonal elastic tensor, we can take the value of the corresponding component of the triclinic elastic tensor as a direct measure of the deviation, 
+Finally, for the set of components which are zero in the tetragonal elastic tensor, we can take the value of the corresponding component of the triclinic elastic tensor as a direct measure of the deviation, 
 
 \begin{equation}\label{eqn:deviationsarezero}
 \Delta^{= 0} _{IJ} = C^{PO}_{IJ}/MPa, \qquad C^{CEF}_{IJ} = 0
@@ -426,6 +444,36 @@ Notice that in all the definitions we take the elastic components from the CEF r
 
 \end{figure}\MFmarginpar{*}{}{Which FO sample?}
 
+\paragraph{min energy elastic constant}
+
+\MFnew{
+the motivation of this story is to clarify if occupancy is important for elastic constant calculations. 
+In the first step, we estimated the differences between PO, CEF and FO approximations.
+At 0K, we identify some PO samples that have the same energy as that of the CEF approximation. 
+This validates our PO model.
+We use the PO model with the lowest energy to compute the elastic constants of the sigma phase and consider that this is the best estimate.
+We then compare this estimate to $C_{IJ}$ calculations for the FO and CEF approximations at 0K.  
+
+For one composition, we needed three DFT calculations for FO states at the nominal composition. 
+We identified the FO state with the minimum energy, and we performed the DFT calculations for the $C_{IJ}$ implying several single point calcuations.
+For the CEF we needed 32 FO calculations to get the energies, and for each single FO configuration, the elastic constants were computed, several single point calculations for each FO sample.
+In our approach, we developed a ML potential to screen the PO samples based in formation energies. 
+We identified th PO that are lower in energy, and for this configuration we performed DFT calcuation of elastic constants for only one representative configuration. 
+
+}
+
+\paragraph{Workflow: avoid elastic constant calculations until the end}
+
+\MFnew{
+\begin{itemize}
+    \item[(1)] calculate energies for 32 FO configurations plus ground states of unaries.
+    \item[(2)] calculate energies of a selection of PO samples to get a representative set of chemical environments of all the lattice sites. 
+    \item[(3)] train a ML potential on the collected DFT data including relaxation paths, random deformations and next neighbour distance expansions. 
+    \item[(4)] Use the cheeper fitted ML to screen the full PO set for those with minimal energy
+    \item[(5)] compute elastic constants for the selected minimal energy sample. 
+    
+\end{itemize}
+}
 
 \paragraph{Elastic moduli including validation set}
 
