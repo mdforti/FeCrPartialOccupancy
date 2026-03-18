@@ -52,19 +52,20 @@
 
 \begin{document}
 
-\title{Influence of partial occupancy on the elastic tensor for FeCr \textsigma - phase.}
+\title{Influence of partial occupancy on elastic tensor of FeCr \textsigma - phase.}
+\title{Influence of mixed sublattice occupancy on elastic tensor of FeCr \textsigma - phase.}
 
 \author{Mariano Forti} \email{mariano.forti@icams.rub.de}
-\affiliation{Interdisciplinary centre for advanced materials simulations (ICAMS), Ruhr Universität Bochum, Germany}
+\affiliation{Interdisciplinary Centre for Advanced Materials Simulation (ICAMS), Ruhr Universität Bochum, Germany}
 
 \author{Guillaume Laplanche} 
-\affiliation{Ruhr Universität Bochum}
+\affiliation{Institute of Materials (WW), Ruhr-Universität Bochum, Germany}
 
 \author{Wenhao Zhang}
 \affiliation{CNRS-Saint-Gobain-NIMS, IRL 3629, Laboratory for Innovative Key Materials and Structures (LINK), 1-1 Namiki, Tsukuba, 305-0044, Ibaraki, Japan}
 
 \author{Thomas Hammerschmidt}
-\affiliation{Interdisciplinary cetre for advanced materials simulations (ICAMS), Ruhr Universität Bochum, Germany}
+\affiliation{Interdisciplinary Centre for Advanced Materials Simulation (ICAMS), Ruhr Universität Bochum, Germany}
 
 \date{\today}
 
@@ -72,7 +73,7 @@
 \begin{abstract}
 The Fe–Cr \textsigma-phase forms in alloys with about 45–50 at.\% Cr at intermediate temperatures and can strongly affect their mechanical performance. 
 Atomistic studies usually assume full sublattice occupation, but experiments show that several Wyckoff sites are only partially occupied, creating many possible local atomic configurations.
-This configurational complexity limits direct first-principles sampling and leaves open questions about how partial occupancy influences the elastic properties of the σ-phase.
+This configurational complexity limits direct first-principles sampling and leaves open questions about how partial occupancy influences the elastic properties of the $\sigma$-phase.
 
 We address this problem using a combination of density functional theory and machine learning interatomic potentials for a Fe\textsubscript{16}Cr\textsubscript{14} composition that matches experimental site occupancies. 
 We screen all possible configurations of the disordered intermetallic based on formation energy and validate the predicted relative stability and mechanical properties with DFT calculations of a representative selection of configurations. This approach enables a direct comparison between the traditional sublattice model and models that include explicit disorder at the atomic level.
@@ -86,7 +87,7 @@ The calculated elastic tensors differ by roughly 10\% from those predicted by sy
 
 \section{Introduction}
 
-The \textsigma~ phase is a common intermetallic compound commonly precipitating at high temperatures in a wide variety of structural alloys, like in stainless steels \MFnewMissRef, Co based superalloys \MFnewMissRef wroght superalloys \MFnewMissRef or high entropy alloys \MFnewMissRef. 
+The \textsigma~ phase is a common intermetallic compound which precipitates usually at high temperatures in a wide variety of structural alloys \cite{hall1966sigma}, like in stainless steels \MFnewMissRef, Co based superalloys \MFnewMissRef wroght superalloys or high entropy alloys \MFnewMissRef. 
 Consequences of its precipitation are usually detrimental for both mechanical properties and corrosion resistance \MFnewMissRef.
 Although in technological applications this phase appear with multi-component compositions, there are a handfull of binary systems showing \textsigma--phase precipitation that can be taken as a basis to study its properties and which also give rise to commercial alloys with techological applications.
 
@@ -101,7 +102,7 @@ There are different approaches to similar problems in atomistic simulations, bas
 Vesti et. al. ~\cite{vesti_ab-initio_2023} utilize a  sublattice model later averaged under the compound energy formalism \MFnew{[missing ref]} to interpolate the properties of a W-Re \textsigma-phase.
 Kabliman et. al.\cite{kabliman_ab_2012}
 use a mean field approximation to study several properties of the \textsigma-phase in other binary systems, also based on full occupancy of the sublattices.
-\MFnew{This methodologies were deviced several years ago, when a full study in the composition and configuration space was not plausible0}.
+\MFnew{This methodologies were deviced several years ago, when a full study in the composition and configuration space was not plausible}.
 \MFnew{Their underlying intention was to approximate a disordered structure with a finite set of oredered unit cells}.
 These approximations may overlook local atomic configuration effects.
 In this work, we investigate how explicit consideration of partial occupancy influences the elastic properties of the \textsigma-phase through first-principles and machine learning interatomic potentials calculations.
@@ -124,8 +125,24 @@ First, we study the change of elastic constants with composition under a full si
 Then, we focus on a nominal composition of Fe\textsubscript{16}Cr\textsubscript{14} (48\%at. Cr) to study the effect of partial occupancy explicitly.
 These calculations are conducted using the Vienna Ab initio Simulation Package (VASP) ~\cite{Hafner_vasp}, utilizing the Perdew-Burke-Ernzerhof (PBE) ~\cite{Perdew1996} exchange-correlation functional and the Projector Augmented Wave (PAW) method ~\cite{Bloch1994, kresse_ultrasoft_1999}.
 \MFnew{
-\paragraph{Magnetic ordering} The \textsigma-phase in the Fe-Cr is stable at high temperatures and and is observed paramagnetic at both high and room temperatures after quenching \MFnewMissRef. 
-Therefore, we calculate elastic constants from non spin polarized calculations only, although the influence of magnetic transitions in mechanical properties will be studied later. 
+\paragraph{Magnetic ordering} The \textsigma-phase in the Fe-Cr is ferromagnetic with a Courie temperature (T$_C$) of 106K \cite{nevitt1955curie}.
+Then at service temperatures avobe 870K, this phase is paramagnetic.
+}
+\MFnew{
+Kabliman et. al. \cite{kabliman2009first} point out that the ground state of \textsigma-phase is magnetic with Feup and Crdn and small magnetic moment.
+
+In a later work  \cite{KablimanConfigurationalThermoSigma}  they point out that magnetism can still play a role in the properties of \textsigma-phase even at high temperatures.
+For instance, they show that magnetic interaction will not affect the site occupancies substantially, although:
+
+`Nevertheless, there are important differences when looking at the details. For instance, neglecting the magnetic entropy causes an underestimation of the Cr concentration on the and sublattices, while the and sublattices have an excess of Cr atoms in comparison with the DLM results (without the LSF), as well as the experimental data. Therefore it is clear that the magnetic entropy has a noticeable effect on the site preference of Fe and Cr atoms.'
+
+}
+\MFnew{
+In a later work, Kabliman al
+}
+\MFnew{
+Although magnetic interactions might still play a role during deformation of the unit cell above T$_C$, we perform non spin polarized calculations for the determination of the elastic constants. 
+An estimation of the errors of such an approximation is carried on in SI.
 }
 
 \paragraph{Full occupancy}\label{methodology:fo} First, we calculate the properties of the \textsigma-phase using a sublattice model.
@@ -170,6 +187,7 @@ We calculate the formation enthalpies $\Delta H_{ijklm}^0$ in reference to the s
 \end{equation}
 
 \noindent where $E_{\ijklm}^{\sigma}$  is the total energy of one unit cell of the \textsigma-phase, $E_{Fe}^{0}$ and $E_{Cr}^{0}$ are the energies per atom of Fe and Cr ground states, respectively, and $x_{\ijklm}^{Fe}$ and $x_{ijklm}^{Cr}$ are the atomic fractions of Fe and Cr in the \textsigma-phase unit cell for the specific configuration.
+
 
 \paragraph{Partial occupancy}\label{methodology:po} To capture the impact of atomic disorder, we explicitly explore all possible atomic arrangements within the \textsigma-phase unit cell, incorporating experimentally reported partial occupancy of WS by Yakel~\cite{yakel_atom_1983} as reproduced in \autoref{fig:PartialOccupancies}.  
 A random distribution in the different sublattices could be modelled for instance by a special quasirandom structure \MFnew{[SQS ref]} but  this would require a big unit cell to generate a meaningful representation of such atomic distributions, in particular due to the small Cr content in the  2\textit{a} site (< 0.5 atom per unit cell).
