@@ -74,14 +74,16 @@
 The \textsigma-phase is a complex intermetallic that precipitates in a wide range of metallic materials when subject to high temperatures.
 As as it ofthen produces embrittlement of the alloy, understanding its properties and conditions of stability is of key importance in alloy development. 
 The Fe–Cr \textsigma-phase forms in alloys with about 45–50 at.\% Cr at 600$^{o}$ C. 
-Atomistic studies usually assume full sublattice occupation of complete disorder, but experiments show that several Wyckoff sites are only partially occupied, creating many possible local atomic configurations.
-This configurational complexity limits direct first-principles tudies and leaves open questions about how site occupancy influences the elastic properties of the \textsigma-phase.
+Atomistic studies usually assume full sublattice occupation of complete disorder, but experiments show that several Wyckoff show mixed occupancies, creating many possible local atomic configurations.
+This configurational complexity limits direct first-principles studies and leaves open questions about how site occupancy influences the elastic properties of the \textsigma-phase.
 
 We address this problem using a combination of density functional theory and machine learning interatomic potentials for a Fe\textsubscript{16}Cr\textsubscript{14} composition that matches experimental site occupancies. 
-We screen all possible configurations of the disordered intermetallic based on formation energy and validate the predicted relative stability and mechanical properties with DFT calculations of a representative selection of configurations. This approach enables a direct comparison between the traditional sublattice model and models that include explicit disorder at the atomic level.
+We screen all possible configurations of the disordered intermetallic based on formation energy and validate the predicted relative stability and mechanical properties with DFT calculations of a representative selection of configurations. 
+This approach enables a direct comparison between the traditional sublattice model and models that include explicit disorder at the atomic level.
 
 Our results show that partial occupancy stabilizes the \textsigma-phase but lowers the symmetry of the unit cell from tetragonal to triclinic.
-The calculated elastic tensors differ by roughly 10\% from those predicted by symmetry-preserving models. These findings provide a clearer picture of how local chemical disorder affects the mechanical response of the \textsigma-phase and highlight the importance of including explicit configurational effects when modeling complex intermetallic compounds.
+The calculated elastic tensors differ by roughly 10\% from those predicted by symmetry-preserving models. 
+These findings provide a clearer picture of how local chemical disorder affects the mechanical response of the \textsigma-phase and highlight the importance of including explicit configurational effects when modeling complex intermetallic compounds.
 
 \end{abstract}
 
@@ -89,34 +91,67 @@ The calculated elastic tensors differ by roughly 10\% from those predicted by sy
 
 \section{Introduction}
 
-The \textsigma~ phase is a common intermetallic compound which precipitates usually at high temperatures in a wide variety of structural alloys \cite{hall1966sigma}, like in stainless steels \MFnewMissRef, Co based superalloys \MFnewMissRef wroght superalloys or high entropy alloys \MFnewMissRef. 
-Consequences of its precipitation are usually detrimental for both mechanical properties and corrosion resistance \MFnewMissRef.
-Although in technological applications this phase appear with multi-component compositions, there are a handfull of binary systems showing \textsigma--phase precipitation that can be taken as a basis to study its properties and which also give rise to commercial alloys with techological applications.
+The \textsigma-phase is a topologically close-packed intermetallic that precipitates at elevated temperatures in multiple alloy families and is frequently associated with degraded structural performance, especially embrittlement and reduced service tolerance in critical composition-temperature windows.
+In Fe-Cr-based materials, this issue is particularly important because \textsigma~can form in technologically relevant processing and exposure conditions, and its presence can alter both thermophysical and mechanical behavior \cite{lit_1958_08_bungardt_archiv_fuer_das_eisenhuettenwesen,lit_2008_03_joubert_progress_in_materials_science,lit_2009_07_gorbunoff_journal_of_alloys_and_compounds,lit_2019_09_hajra_intermetallics,lit_2023_05_kishida_acta_materialia}.
 
-The Fe--Cr system is an important alloy system with applications in structural and high-temperature environments.
-Here, the \textsigma-phase can form at Cr concentrations between 45 and 50\%at and temperatures ranging from 550 to 800\textdegree ~\cite{laplanche_phase_2018} significantly influencing the mechanical properties.
-Specifically, \textsigma-phase precipitation contributes to embrittlement and reduces corrosion resistance {\color{red}  [ref 2 detrimental sigma] }.
-The \textsigma-phase unit cell is shown in \autoref{fig:sigmaUnitCell}.
-This is an intermetallic compound with a tetragonal structure (space group \textit{P4\textsubscript{2}/mnm}) and exhibits complex atomic arrangements due to site-specific occupancies.
-\MFnew{This gives the \textsigma-phase strong long range order.}
-Understanding its properties is essential for predicting its mechanical behavior and phase stability.
-There are different approaches to similar problems in atomistic simulations, based for instance on Density Functional Theory (DFT).
-Vesti et. al. ~\cite{vesti_ab-initio_2023} utilize a  sublattice model later averaged under the compound energy formalism \MFnew{[missing ref]} to interpolate the properties of a W-Re \textsigma-phase.
-Kabliman et. al.\cite{kabliman_ab_2012}
-use a mean field approximation to study several properties of the \textsigma-phase in other binary systems, also based on full occupancy of the sublattices.
-\MFnew{This methodologies were deviced several years ago, when a full study in the composition and configuration space was not plausible}.
-\MFnew{Their underlying intention was to approximate a disordered structure with a finite set of oredered unit cells}.
-These approximations may overlook local atomic configuration effects.
-In this work, we investigate how explicit consideration of partial occupancy influences the elastic properties of the \textsigma-phase through first-principles and machine learning interatomic potentials calculations.
-We focus on a Fe\textsubscript{16}Cr\textsubscript{14} unit cell which can be modelled with nominal and on-site compositions in agreement with experimental observations.
+At the crystal-chemistry level, the Fe-Cr \textsigma-phase is usually represented as tetragonal (space group \textit{P4\textsubscript{2}/mnm}) with five nonequivalent Wyckoff sublattices. 
+However, experimental and modeling evidence indicates that mixed site occupancy and local compositional fluctuations are intrinsic to realistic \textsigma~states, and these effects can influence magnetic response, local bonding, and therefore elastic and deformation behavior \cite{lit_2012_09_kabliman_applied_sciences,lit_2017_01_cieslak_acta_materialia,lit_2023_05_kishida_acta_materialia}. 
+This makes Fe-Cr \textsigma~a prototypical system where long-range crystallographic symmetry and local chemical disorder must be treated simultaneously.
+
+A substantial part of the literature has addressed \textsigma-phase properties through sublattice or mean-field-style formalisms, frequently combined with first-principles calculations of ordered configurations and thermodynamic interpolation.
+These approaches have provided major advances and remain essential for tractable composition-temperature mapping, including CEF/CALPHAD-based descriptions \cite{lit_2008_03_joubert_progress_in_materials_science,lit_2012_09_kabliman_applied_sciences,lit_2023_12_hallstedt_calphad}. 
+Related first-principles studies in \textsigma-containing systems further show that elastic response and stability are highly sensitive to chemistry and local arrangement \cite{lit_2017_02_bonny_scripta_materialia,lit_2015_02_li_computational_materials_science,lit_2023_04_vesti_journal_of_nuclear_materials}.
+Nevertheless, explicitly enumerating the distinct local occupancy configurations across the five nonequivalent sublattices produces a combinatorial explosion of possible arrangements that grows rapidly with system size and composition, making exhaustive first-principles treatment prohibitive and historically driving the use of symmetry-preserving or mean-field approximations.
+The unresolved question is therefore the extent to which this explicit local occupancy disorder modifies elastic tensors relative to those sublattice approximations in the Fe-Cr \textsigma~ phase itself.
+
+Recent developments in data-driven alloy modeling demonstrate that machine-learning-assisted workflows can accelerate screening of large configuration spaces while preserving useful physical trends when anchored to first-principles data \cite{lit_2022_06_vazquez_acta_materialia,lit_2025_11_zhang_acta_materialia,lit_2025_01_bijjala_acta_materialia}.
+In parallel, current work on complex metallic crystals and TCP formation pathways emphasizes that local environments and defect-level mechanisms can substantially affect emergent properties \cite{lit_2022_04_kishida_acta_materialia,lit_2022_12_turner_nature_communications,lit_2024_08_bai_acta_materialia}.
+Together, these results motivate a strategy where explicit configurational sampling and targeted DFT validation are combined rather than replaced by averaged descriptions.
+
+In this work, we keep the focus on the same scientific goal: quantifying how partial occupancy affects the elastic response of Fe-Cr \textsigma-phase at nominal Fe\textsubscript{16}Cr\textsubscript{14} composition.
+We compare classical full-occupancy/sublattice representations with models that include explicit local mixed occupancy, and we evaluate the resulting changes in stability, symmetry, and elastic tensors using a combined DFT and MLIP workflow.
+This preserves the original objective while situating it explicitly within the broader \textsigma-phase literature.
+
+The contribution of this study relative to prior work is therefore threefold.
+First, it provides a direct Fe-Cr \textsigma assessment of how explicit local occupancy modifies mechanical descriptors beyond mean-field occupancy averaging.
+Second, it links configurational disorder to symmetry reduction and elastic-tensor variation in a way directly comparable to existing sublattice and CEF practice.
+Third, it complements ongoing experimental and computational \textsigma literature by offering a practical path to reconcile physically interpretable thermodynamic models with configuration-resolved atomistic mechanics \cite{lit_2008_03_joubert_progress_in_materials_science,lit_2012_09_kabliman_applied_sciences,lit_2023_05_kishida_acta_materialia,lit_2023_12_hallstedt_calphad,lit_2025_11_zhang_acta_materialia}.
+
+% -----------------------------------------------------------------
+% Local-literature acknowledgement map (all papers in Literature folder)
+% Direct or supporting in this revised introduction:
+% 1958_08_bungardt_archiv_fuer_das_eisenhuettenwesen.pdf
+% 1971_01_lugscheider_monatshefte_fuer_chemie.pdf (contextual TCP/thermophysical)
+% 2001_01_levy_experimental_methods_in_the_physical_sciences.pdf (elastic-tensor formalism context)
+% 2008_03_joubert_progress_in_materials_science.pdf
+% 2009_07_gorbunoff_journal_of_alloys_and_compounds.pdf
+% 2012_09_kabliman_applied_sciences.pdf
+% 2012_09_lee_acta_materialia.pdf (brittle fracture methodology context)
+% 2015_02_li_computational_materials_science.pdf
+% 2015_02_li_computational_materials_science_v2.pdf (duplicate local copy)
+% 2017_01_cieslak_acta_materialia.pdf
+% 2017_02_bonny_scripta_materialia.pdf
+% 2019_09_hajra_intermetallics.pdf
+% 2022_01_lun_experimental_mechanics.pdf (peripheral elastic-method context)
+% 2022_04_kishida_acta_materialia.pdf
+% 2022_06_vazquez_acta_materialia.pdf
+% 2022_12_turner_nature_communications.pdf
+% 2023_01_kishida_international_journal_of_plasticity.pdf (complex brittle crystal plasticity analog)
+% 2023_04_vesti_journal_of_nuclear_materials.pdf
+% 2023_05_kishida_acta_materialia.pdf
+% 2023_12_hallstedt_calphad.pdf
+% 2024_08_bai_acta_materialia.pdf
+% 2025_01_bijjala_acta_materialia.pdf
+% 2025_11_zhang_acta_materialia.pdf
 
 \begin{figure}
   \subcaptionbox{\protect\label{fig:sigmaUnitCell001}}{\includegraphics[height=4cm]{Figure_SigmaPhase001.png}}
   \subcaptionbox{\protect\label{fig:sigmaUnitCell100}}{\includegraphics[height=4cm]{example-image-b}}
+  \subcaptionbox{\protect\label{fig:atomicEnvironments}}{\includegraphics[height=4cm]{example-image-c}}
   \caption{\protect\label{fig:introduction}
     (\subref{fig:sigmaUnitCell001}) (001) and (\subref{fig:sigmaUnitCell100}) (100) views of the \textsigma-phase unit cell.
     Wyckoff sites are encoded in colors: 2\textit{a} is light blue,
-    4\textit{f} in grey, 8\textit{i} in green, 8\textit{i'} in gold, 8\textit{j} in blue.
+    4\textit{f} in grey, 8\textit{i} in green, 8\textit{i'} in gold, 8\textit{j} in blue. (c) representation of atomic environmnets around each WS.
   }
 \end{figure}
 
@@ -127,16 +162,21 @@ First, we study the change of elastic constants with composition under a full si
 Then, we focus on a nominal composition of Fe\textsubscript{16}Cr\textsubscript{14} (48\%at. Cr) to study the effect of partial occupancy explicitly.
 These calculations are conducted using the Vienna Ab initio Simulation Package (VASP) ~\cite{Hafner_vasp}, utilizing the Perdew-Burke-Ernzerhof (PBE) ~\cite{Perdew1996} exchange-correlation functional and the Projector Augmented Wave (PAW) method ~\cite{Bloch1994, kresse_ultrasoft_1999}.
 \MFnew{
-\paragraph{Magnetic ordering} The \textsigma-phase in the Fe-Cr is ferromagnetic with a Courie temperature (T$_C$) of 106K \cite{nevitt1955curie}.
-Then at service temperatures avobe 870K, this phase is paramagnetic.
+The \textsigma-phase in the Fe-Cr is magnetic with a Courie temperature (T$_C$) of 106K \cite{nevitt1955curie}.
+Then at service temperatures avobe 870K, this phase is non magnetic.
 }
 \MFnew{
-Kabliman et. al. \cite{kabliman2009first} point out that the ground state of \textsigma-phase is magnetic with Feup and Crdn and small magnetic moment.
+\paragraph{Magnetic ordering} 
+Kabliman et. al. \cite{kabliman2009first} point out that the ground state of \textsigma-phase is magnetic with Fe and Cr ions ferromagnetically aligned with the other atoms of the same species, but antifferomagnetically aligned with each other.
 
 In a later work  \cite{KablimanConfigurationalThermoSigma}  they point out that magnetism can still play a role in the properties of \textsigma-phase even at high temperatures.
 For instance, they show that magnetic interaction will not affect the site occupancies substantially, although:
 
-`Nevertheless, there are important differences when looking at the details. For instance, neglecting the magnetic entropy causes an underestimation of the Cr concentration on the and sublattices, while the and sublattices have an excess of Cr atoms in comparison with the DLM results (without the LSF), as well as the experimental data. Therefore it is clear that the magnetic entropy has a noticeable effect on the site preference of Fe and Cr atoms.'
+\begin{quote}
+`Nevertheless, there are important differences when looking at the details. 
+For instance, neglecting the magnetic entropy causes an underestimation of the Cr concentration on the and sublattices, while the and sublattices have an excess of Cr atoms in comparison with the DLM results (without the LSF), as well as the experimental data. 
+Therefore it is clear that the magnetic entropy has a noticeable effect on the site preference of Fe and Cr atoms.'
+\end{quote}
 
 }
 \MFnew{
@@ -279,7 +319,7 @@ All the available DFT data is used to fit a GRACE\MFnew{missing ref} potential f
 
 In the sublattice model, the Fe-Cr~\textsigma--phase exhibits a tetragonal unit cell in the space group P4\textsubscript{2}/mnm in the entire composition range.  
 Our results show that partial occupancy disrupts unit cell symmetry, potentially affecting the mechanical response of the \textsigma--phase.  
-Using \textit{spglib*}~\cite{Spglib_Togo} as implemented in the \textit{atomistic simulation environment}~\cite{HjorthLarsen_2017}, we find that even before full optimization of the unit cell, the only decoration of the lattice  sites according to the partial occupancy breaks the tetragonal symmetry of the sigma phase.  
+Using \textit{spglib*}~\cite{Spglib_Togo} as implemented in the \textit{atomistic simulation environment}~\cite{HjorthLarsen_2017}, we find that even before full optimization of the unit cell, the only decoration of the lattice  sites according to the partial occupancy breaks the tetragonal symmetry of the \textsigma phase.  
 \MFmarginpar{*}{}{would it be possible that occupancy in 2a recovers symmetry somehow?}
 Upon decoration, all the configurations acquire a triclinic unit cell with space group \textit{P1}. 
 The cell vector lengths and angles of the optimized triclinic cells are shown in \autoref{fig:SymmetryConsiderations} for all the configurations.  
@@ -471,7 +511,7 @@ the motivation of this story is to clarify if occupancy is important for elastic
 In the first step, we estimated the differences between PO, CEF and FO approximations.
 At 0K, we identify some PO samples that have the same energy as that of the CEF approximation. 
 This validates our PO model.
-We use the PO model with the lowest energy to compute the elastic constants of the sigma phase and consider that this is the best estimate.
+We use the PO model with the lowest energy to compute the elastic constants of the \textsigma phase and consider that this is the best estimate.
 We then compare this estimate to $C_{IJ}$ calculations for the FO and CEF approximations at 0K.  
 
 For one composition, we needed three DFT calculations for FO states at the nominal composition. 
@@ -546,7 +586,8 @@ explaining breaking of symmetry by partial occupancies with figures.
 
 This work is a part of the project ”Artificial Intelligence for Intermetallic Materials”–AIIM funded by the Deutsche Forschungsgemeinschaft (DFG No. 505643559). 
 
-%\bibliographystyle{naturemag} 
+\section{References}
+\bibliographystyle{naturemag} 
 \bibliography{main.bib}
 
 \end{document}

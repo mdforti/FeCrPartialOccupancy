@@ -1,17 +1,17 @@
-LATEX=pdflatex
+LATEX=pdflatex -interaction=nonstopmode
 BIB=bibtex
 
 all: main.pdf suplementary.pdf PanelFigures
 
 main.pdf: main.tex main.bbl
 	$(LATEX) main.tex
-	$(LATEX) main.tex
 
 main.bbl: main.aux
+	-$(LATEX) -interaction=nonstopmode main.tex
 	$(BIB) main
 
 main.aux: main.tex main.bib
-	$(LATEX) main.tex
+	-$(LATEX) -interaction=nonstopmode main.tex
 
 suplementary.pdf: suplementary.tex main.bbl
 	$(LATEX) suplementary.tex
