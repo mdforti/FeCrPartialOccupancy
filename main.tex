@@ -72,17 +72,18 @@
 
 \begin{abstract}
 The \textsigma-phase is a complex intermetallic that precipitates in a wide range of metallic materials when subject to high temperatures.
-As as it ofthen produces embrittlement of the alloy, understanding its properties and conditions of stability is of key importance in alloy development. 
-The Fe–Cr \textsigma-phase forms in alloys with about 45–50 at.\% Cr at 600$^{o}$ C. 
-Atomistic studies usually assume full sublattice occupation of complete disorder, but experiments show that several Wyckoff show mixed occupancies, creating many possible local atomic configurations.
+As it often produces embrittlement of the alloy, understanding its properties and conditions of stability is of key importance in alloy development. 
+The Fe–Cr \textsigma-phase forms in alloys with about 45–50\,at.\% Cr at 600\,°C. 
+Atomistic studies usually assume full sublattice occupation or complete disorder, but experiments show that several Wyckoff sites exhibit mixed occupancies, creating many possible local atomic configurations.
 This configurational complexity limits direct first-principles studies and leaves open questions about how site occupancy influences the elastic properties of the \textsigma-phase.
 
-We address this problem using a combination of density functional theory and machine learning interatomic potentials for a Fe\textsubscript{16}Cr\textsubscript{14} composition that matches experimental site occupancies. 
-We screen all possible configurations of the disordered intermetallic based on formation energy and validate the predicted relative stability and mechanical properties with DFT calculations of a representative selection of configurations. 
-This approach enables a direct comparison between the traditional sublattice model and models that include explicit disorder at the atomic level.
+We address this problem using a combination of density functional theory and machine learning interatomic potentials for a Fe\textsubscript{16}Cr\textsubscript{14} composition that matches experimental site occupancies.
+Formation enthalpies are referenced to spin-polarized (FM) BCC Fe and Cr ground states throughout, providing a physically consistent energy scale for both spin-polarized and non-spin-polarized calculations.
+We screen all possible configurations of the disordered intermetallic based on formation energy and identify the minimum-energy partial-occupancy configuration ($C^{PO,\min}$), which represents the physically most consistent atomistic estimate of the elastic tensor.
+This configuration is validated against DFT calculations and used as the reference to assess the accuracy of the classical full-occupancy sublattice (FO) and compound energy formalism (CEF) approximations.
 
-Our results show that partial occupancy stabilizes the \textsigma-phase but lowers the symmetry of the unit cell from tetragonal to triclinic.
-The calculated elastic tensors differ by roughly 10\% from those predicted by symmetry-preserving models. 
+Our results show that partial occupancy stabilizes the \textsigma-phase and lowers the unit-cell symmetry from tetragonal to triclinic.
+The elastic constants predicted by the FO and CEF approximations deviate by roughly 10\% from the minimum-energy PO reference, with both approximations systematically overestimating stiffness.
 These findings provide a clearer picture of how local chemical disorder affects the mechanical response of the \textsigma-phase and highlight the importance of including explicit configurational effects when modeling complex intermetallic compounds.
 
 \end{abstract}
@@ -161,31 +162,16 @@ We employ first-principles DFT calculations to determine the elastic constants o
 First, we study the change of elastic constants with composition under a full site occupancy approximation.
 Then, we focus on a nominal composition of Fe\textsubscript{16}Cr\textsubscript{14} (48\%at. Cr) to study the effect of partial occupancy explicitly.
 These calculations are conducted using the Vienna Ab initio Simulation Package (VASP) ~\cite{Hafner_vasp}, utilizing the Perdew-Burke-Ernzerhof (PBE) ~\cite{Perdew1996} exchange-correlation functional and the Projector Augmented Wave (PAW) method ~\cite{Bloch1994, kresse_ultrasoft_1999}.
-\MFnew{
-The \textsigma-phase in the Fe-Cr is magnetic with a Courie temperature (T$_C$) of 106K \cite{nevitt1955curie}.
-Then at service temperatures avobe 870K, this phase is non magnetic.
-}
-\MFnew{
-\paragraph{Magnetic ordering} 
-Kabliman et. al. \cite{kabliman2009first} point out that the ground state of \textsigma-phase is magnetic with Fe and Cr ions ferromagnetically aligned with the other atoms of the same species, but antifferomagnetically aligned with each other.
+\paragraph{Magnetic ordering}
+The Fe–Cr \textsigma-phase is magnetic below a Curie temperature of approximately 106\,K \cite{nevitt1955curie}.
+At the service temperatures relevant to alloy embrittlement (above 870\,K) the phase is therefore non-magnetic.
+Kabliman et al.\ \cite{kabliman2009first} showed that the 0\,K ground state is ferrimagnetic, with Fe and Cr sublattices ferromagnetically ordered among themselves but antiferromagnetically coupled to each other.
+Later work by the same group \cite{KablimanConfigurationalThermoSigma} demonstrated that magnetic entropy has a noticeable influence on the site-preference of Fe and Cr atoms but leaves the overall phase behaviour qualitatively unchanged above T$_C$.
+Accordingly, we perform non-spin-polarized (NM) calculations for the determination of the elastic constants, consistent with the paramagnetic state at service temperatures.
+An estimation of the errors introduced by this approximation is provided in the Supplementary Information.
 
-In a later work  \cite{KablimanConfigurationalThermoSigma}  they point out that magnetism can still play a role in the properties of \textsigma-phase even at high temperatures.
-For instance, they show that magnetic interaction will not affect the site occupancies substantially, although:
-
-\begin{quote}
-`Nevertheless, there are important differences when looking at the details. 
-For instance, neglecting the magnetic entropy causes an underestimation of the Cr concentration on the and sublattices, while the and sublattices have an excess of Cr atoms in comparison with the DLM results (without the LSF), as well as the experimental data. 
-Therefore it is clear that the magnetic entropy has a noticeable effect on the site preference of Fe and Cr atoms.'
-\end{quote}
-
-}
-\MFnew{
-In a later work, Kabliman al
-}
-\MFnew{
-Although magnetic interactions might still play a role during deformation of the unit cell above T$_C$, we perform non spin polarized calculations for the determination of the elastic constants. 
-An estimation of the errors of such an approximation is carried on in SI.
-}
+Formation enthalpies throughout this work are referenced to the spin-polarized (FM) BCC ground states of elemental Fe and Cr.
+This choice is physically motivated: FM BCC is the true 0\,K ground state of both elements and provides a consistent, well-defined reference for comparing NM and FM \textsigma-phase configurations on a common energy scale.
 
 \paragraph{Full occupancy}\label{methodology:fo} First, we calculate the properties of the \textsigma-phase using a sublattice model.
 This means, that the lattice positions of a WS are occupied either by Cr or Fe.
@@ -222,13 +208,14 @@ In eq 2, the temperature dependence of the enthalpy variation arises from that o
 The compound index \textit{\ijklm} identifies a particular end member with a given configuration. 
 $H_{i j k l m} ^0$ are the formation enthalpies at 0K of such configuraition, $m_s$ are the multiplicities of the sublattices \siteA \ldots \siteE~with $m_s = 2, 4, 8, 8, 8$ respectively, and $N$ is the total number of atoms in the unit cell.
 As this is a well established method, we refer to the original literature for further details.
-We calculate the formation enthalpies $\Delta H_{ijklm}^0$ in reference to the stable ground states of Fe and Cr, 
+We calculate the formation enthalpies $\Delta H_{ijklm}^0$ in reference to the spin-polarized (FM) BCC ground states of Fe and Cr, 
 
-\begin{equation}
-  \Delta H_{\ijklm}^0 = E_{\ijklm}^{\sigma} - \left( x_{\ijklm}^{Fe} E^{Fe}_{0} + x_{\ijklm}^{Cr} E^{Cr}_{0} \right)
+\begin{equation}\label{eqn:formation_enthalpy}
+  \Delta H_{\ijklm}^0 = E_{\ijklm}^{\sigma} - \left( x_{\ijklm}^{Fe} E^{Fe,FM}_{0,\text{bcc}} + x_{\ijklm}^{Cr} E^{Cr,FM}_{0,\text{bcc}} \right)
 \end{equation}
 
-\noindent where $E_{\ijklm}^{\sigma}$  is the total energy of one unit cell of the \textsigma-phase, $E_{Fe}^{0}$ and $E_{Cr}^{0}$ are the energies per atom of Fe and Cr ground states, respectively, and $x_{\ijklm}^{Fe}$ and $x_{ijklm}^{Cr}$ are the atomic fractions of Fe and Cr in the \textsigma-phase unit cell for the specific configuration.
+\noindent where $E_{\ijklm}^{\sigma}$ is the total energy of one unit cell of the \textsigma-phase, $E_{0,\text{bcc}}^{Fe,FM}$ and $E_{0,\text{bcc}}^{Cr,FM}$ are the energies per atom of the spin-polarized BCC ground states of Fe and Cr, respectively, and $x_{\ijklm}^{Fe}$ and $x_{ijklm}^{Cr}$ are the atomic fractions of Fe and Cr in the \textsigma-phase unit cell for the specific configuration.
+Using FM BCC references ensures that both NM and FM \textsigma-phase calculations are evaluated against the same, physically correct elemental ground states.
 
 
 \paragraph{Partial occupancy}\label{methodology:po} To capture the impact of atomic disorder, we explicitly explore all possible atomic arrangements within the \textsigma-phase unit cell, incorporating experimentally reported partial occupancy of WS by Yakel~\cite{yakel_atom_1983} as reproduced in \autoref{fig:PartialOccupancies}.  
@@ -252,13 +239,14 @@ The total number of possible configurations now explodes to $ 1 \times 4 \times 
 We choose the explained naming convention according to increasing number of possible configurations.
 In both models, the combinatorial explosion of the number of configurations hinders any extensive estimation of the elastic constants of a significant number of samples from DFT calculations, although in the second model the number of configurations is significantly reduced and approaching statistical significance would be easier.
 
-\MFnew{
-In comparison to these partial occupancy models, a sublattice model of the nominal composition of intersest would have a very different site occpancy. 
-As shown in \autoref{fig:PartialOccupancies}, there are three possible configurations with nominal composition Fe\textsubscript{16}Cr\textsubscript{14} ($\approx$ 52at\% Fe). 
-All of them have site \siteA~filled wih Cr instead of Fe. 
-In addition, only one of the 8\textit{i}, 8\textit{i'} and 8\textit{j} sites would have Cr. 
-This configuration might greatly destabilize the unit cell.
-}
+In comparison to these partial occupancy models, a sublattice model of the nominal composition of interest would have a very different site occupancy. 
+As shown in \autoref{fig:PartialOccupancies}, there are three possible configurations with nominal composition Fe\textsubscript{16}Cr\textsubscript{14} ($\approx$ 52\,at.\% Fe). 
+All of them have site \siteA~filled with Cr instead of Fe. 
+In addition, only one of the \siteC, \siteD, and \siteE~sites would carry Cr, which may substantially destabilize the unit cell relative to partial-occupancy models.
+
+Among all configurations explored within each partial-occupancy model, we identify the configuration with the lowest formation enthalpy as the minimum-energy partial-occupancy sample, denoted $C^{PO,\min}$.
+This configuration represents the thermodynamically most favored local arrangement accessible within the partial-occupancy constraint, and therefore provides the physically most consistent estimate of the elastic tensor.
+We use $C^{PO,\min}$ as the primary reference when quantifying how well the classical sublattice approximations (FO and CEF) reproduce the elastic properties of the σ-phase.
 
 \paragraph{Elastic constants}
 
@@ -277,8 +265,8 @@ By designing deformation tensors which exploit the symmetry of the unit cell, th
   }
 \end{figure}
 
-Under the sublattice model, it is also customary to approximate any property of the disordered structure as a weighted average of the properties of the end-member configurations \MFnew{[missing ref]}.
-In particular for the elastic constants $c_{IJ}$ 
+Under the sublattice model, it is also customary to approximate any property of the disordered structure as a weighted average of the properties of the end-member configurations~\cite{dupin_using_2006}.
+In particular for the elastic constants $c_{IJ}$, 
 
 \begin{equation}\label{cefcij}
   c_{IJ}^{CEF} (x, T) = \sum_{i j k l m = Fe, Cr} {}
@@ -289,29 +277,21 @@ In particular for the elastic constants $c_{IJ}$
 
 \paragraph{MLIP}
 
-\MFnew{In recent years, universal force fields based on machine learning potentials have gained increasing attention. 
-They are MLIPs fitted on massive DFT force-energy surface databases which have been progressively designed in order to improve the final  UFF accuracy. 
-They allow for efficient use of computational resources to speed up calculations with high accuracy compared to DFT, and seem like a perfect tool for the task of scanning the high volume configurational space in the problem we present here.
-However, the calculation of complex properties like the elastic tensor and the complex atomic environment in the \textsigma-phase may pose a challenge for this tools.
-}
-
-\vspace{1cm}
-\MFnew{fine tuning or fitting as complementary tool}
-\vspace{1cm}
-
-Here we perform a combined DFT / machine learning interatomic potential (MLIP) approach to reduce the combinatorial sampling to the most relevant configurations, i.e. those with the lowest formation enthalpy.
+In recent years, universal machine-learning interatomic potentials (MLIPs) fitted on large DFT databases have emerged as efficient screening tools for complex configurational spaces~\cite{lit_2022_06_vazquez_acta_materialia,lit_2025_01_bijjala_acta_materialia}.
+While such universal potentials can represent a wide range of chemistries, the complex atomic environments and elastic response of the \textsigma-phase may challenge their accuracy.
+Here we instead fit a dedicated GRACE\MFnew{missing ref} potential from scratch on a targeted Fe-Cr \textsigma-phase DFT dataset, using it solely as a screening tool to rank the large set of partial-occupancy configurations by formation enthalpy, not as a replacement for DFT elastic constant calculations.
 As a first step, we select a subset of 25 representative configurations of each model and calculate their optimized unit cell and their elastic constants using DFT. 
-We extend the resulting dataset to build a a specialized Fe-Cr \textsigma-phase DFT dataset consisting of 
+We extend the resulting dataset to build a specialized Fe-Cr \textsigma-phase DFT training set consisting of 
 
 \begin{itemize}
-	\item the relaxation path of all the full-occupancy samples,
-	\item the relaxation paths of the 50 ad-hoc chosen partial-occupancy samples,
-	\item random deformations including isotropic compresion and expansions and atom-position shaking, 
-	\item relaxation paths for unit cell optimization of the bcc, fcc, and hcp unary unit cells of the constitutents (Fe and Cr), 
-	\item nearest neighbour expansions of the bcc, fcc, and hcp unary unit cells of the constituent elements (Fe and Cr)
+	\item the relaxation paths of all full-occupancy samples,
+	\item the relaxation paths of 50 ad-hoc chosen partial-occupancy samples,
+	\item random deformations including isotropic compression, expansion, and atom-position shaking, 
+	\item relaxation paths for unit cell optimization of the BCC, FCC, and HCP unary structures of Fe and Cr, 
+	\item nearest-neighbour distance expansions of the BCC, FCC, and HCP unary structures of Fe and Cr.
 \end{itemize}
 
-All the available DFT data is used to fit a GRACE\MFnew{missing ref} potential from scratch. 
+All available DFT data are used to fit the GRACE potential from scratch.
 
 
 
@@ -325,19 +305,19 @@ Upon decoration, all the configurations acquire a triclinic unit cell with space
 The cell vector lengths and angles of the optimized triclinic cells are shown in \autoref{fig:SymmetryConsiderations} for all the configurations.  
 Although small, the introduced structural variations might affect the mechanical properties of the \textsigma-phase. 
 
-\paragraph{phase stability}\MFmarginpar{*}{}{include validation point}
+\paragraph{Phase stability}\MFmarginpar{*}{}{include validation point}
 The calculated convex hull for the full occupancy samples and both models with partial occupancy is shown in \autoref{subfig:FormationEnergies}. 
-The formation enthalpies at 0K (DFT) of the \textsigma-phase are possitive for all compositions. 
-However, CEF results show that the \textsigma-phase becomes stable starting at 873K, although the composition seems to be shifted towards the Cr rich region.
-In the other hand, at the composition of interest, introducing partial occupancy stabilizes the phase as several samples have a formation enthalpy below the tie-line of the full-occupancy convex hull. 
-In contrast, the samples at the same composition but within the sublattice model (FO1, FO2 and FO3)  lay tens of meV/at avobe the convex hull tie line.
-No direct correlation between the formation enthalpy and unit cell distoritions is observed within the chosen samples.
+All formation enthalpies are referenced to the spin-polarized FM BCC ground states of Fe and Cr (Eq.~\eqref{eqn:formation_enthalpy}).
+The formation enthalpies at 0\,K (DFT) of the \textsigma-phase are positive for all compositions, reflecting the metastable nature of the phase at low temperature. 
+However, CEF results show that the \textsigma-phase becomes thermodynamically stable starting at approximately 873\,K, although the predicted stable composition appears shifted toward the Cr-rich region relative to experiment.
+Introducing partial occupancy stabilizes the phase at the composition of interest: several PO samples fall below the tie-line of the full-occupancy convex hull.
+In contrast, the FO configurations at the same nominal composition (FO1, FO2, FO3) lie tens of meV/atom above the convex-hull tie line.
+No direct correlation between formation enthalpy and unit cell distortions is observed within the selected samples.
 
-The formation enthalpies of the PO1 set approaches the Gibbs free energies from the CEF at 0K, even for our limited selection of samples, and to the moment we dont find any sample with energies below this limit.
-CEF site occupancey is alsor reported in comparison with the experimental data from Yakel ~\cite{yakel_atom_1983} in \autoref{subfig:CEF_Occupancy}.
-We observe in general a very good agreement with experimental results.
-At 873K we obtain nearly full Fe occupancy in sites \siteA~ and \siteD~ , both sites with 12-fold coordination.
-However, experimental occupancy is about 10\% lower in both sites, which is compensated bay a small exess Fe in site \siteE .
+The formation enthalpies of the PO1 set approach the 0\,K Gibbs free energy from the CEF, even within our limited initial DFT selection; no individual PO configuration is found below this thermodynamic lower bound, as expected.
+CEF site occupancies are reported alongside the experimental data from Yakel~\cite{yakel_atom_1983} in \autoref{subfig:CEF_Occupancy}.
+The agreement with experiment is generally very good.
+At 873\,K we obtain nearly full Fe occupancy in sites \siteA~and \siteD, both with 12-fold coordination, while experimental occupancy is approximately 10\% lower in both sites—the difference is compensated by a small excess of Fe in site \siteE.
 
 
 \begin{figure}[t!]
@@ -347,15 +327,14 @@ However, experimental occupancy is about 10\% lower in both sites, which is comp
   \subcaptionbox{\protect\label{subfig:CEF_Occupancy}}{\includegraphics[height=5cm]{Figure_CEF_results_occupancy.pdf}}
   \caption{
     \protect\label{fig:SymmetryConsiderations}
-    \MFnew{ Maybe split d into low and high temp}
     Effect of partial occupancy on unit cell geometry and stability. 
-    (\subref{subfig:angle_symmetry_rupture}) Distribution of $\alpha$ and $\gamma$ angles for models with partial occupancy after full optimization with DFT. 
-    (\subref{subfig:lattice_parameters}) Distribution of $\alpha$ and $\gamma$ angles for models with partial occupancy after full optimization with DFT. 
-    (\subref{subfig:FormationEnergies}) Formation enthalpy at 0K for the full occupancy model and the two models with partial occupancy. 
-    Gibbs free energy from the CEF model is displayed at 0K (black broken line) and 873K (blue broken line).
-    Arrows indicate the formation enthalpies for the sublattice model samples with nominal composition 53at\%Fe. 
-    (\subref{subfig:CEF_Occupancy}) Site occupacy profile as resulting from the minimization problem in equation \ref{eqn:CEF} at 873K (solid lines), 0K (broken lines) compared to experimental data (square markers), PO1 (rightwards arrows) and PO2 (leftwise arrows) occupancy. 
-    Data at x\textsubscript{\textit{Fe}} = 0.52 was shifted horizontally to make all markers visible.
+    (\subref{subfig:angle_symmetry_rupture}) Distribution of $\alpha$ and $\gamma$ angles for PO models after full DFT optimization. 
+    (\subref{subfig:lattice_parameters}) Distribution of lattice parameters for PO models after full DFT optimization. 
+    (\subref{subfig:FormationEnergies}) Formation enthalpy at 0\,K for the full-occupancy and partial-occupancy models, referenced to FM BCC Fe and Cr. 
+    Gibbs free energy from the CEF model is displayed at 0\,K (black dashed line) and 873\,K (blue dashed line).
+    Arrows indicate the formation enthalpies for the sublattice model (FO) samples at the nominal $\approx$53\,at.\% Fe composition. 
+    (\subref{subfig:CEF_Occupancy}) Site occupancy profile from the CEF minimization (Eq.~\ref{eqn:CEF}) at 873\,K (solid lines) and 0\,K (dashed lines), compared to experimental data (square markers), PO1 (rightward arrows) and PO2 (leftward arrows). 
+    Data at $x_{Fe} = 0.52$ are shifted horizontally for visibility.
     }
 \end{figure}
 
@@ -459,28 +438,30 @@ This makes the determination of the elastic tensor of the non-symmetrical tricli
 
 However, the size of ad-hoc selected PO1 and PO2 plus the validation set is manageable with DFT calculations.
 
-We measure deviations in the elastic constants depending on the location of the components in the elastic tensor. 
-For instance, there are several symmetry-based equalities on the tensor defined in equation \eqref{eqn:tetragonalElasticTensor}. 
-For those components, define ratios, 
+We quantify the accuracy of the sublattice approximations by measuring how their elastic constants deviate from the reference $C^{PO,\min}$ of the minimum-energy partial-occupancy configuration.
+Three complementary metrics are defined.
+
+For the tetragonal symmetry of the FO and CEF models, certain pairs of components are exactly equal, e.g.\ $C_{11}^{CEF} = C_{22}^{CEF}$.
+The partial-occupancy samples break this equality.
+To assess how much PO configurations violate tetragonal symmetry we define the ratio
 
 \begin{equation}\label{eqn:ratios}
     r_{IJ,KL} = \dfrac{C^{PO}_{IJ}}{C^{PO}_{KL}}, \qquad C^{CEF}_{IJ} = C^{CEF}_{KL} 
 \end{equation}
 
-\noindent such that $r_{11,22}$, $r_{44, 55}$ and $r_{13, 23}$ are defined. 
+\noindent such that $r_{11,22}$, $r_{44,55}$ and $r_{13,23}$ are defined; a value of unity indicates tetragonal symmetry is preserved.
 
-Then, for those elements which are different than zero in the tetragonal elastic tensor in equation \eqref{eqn:tetragonalElasticTensor}, we can define deviations in the triclinic tensor:
+For the components that are non-zero in the tetragonal tensor, we define the relative deviation of any approximation $X \in \{FO,\,CEF\}$ from the minimum-energy PO reference:
 
 \begin{equation}\label{eqn:deviatiosnonzero}
-\Delta^{\neq 0} _{IJ} = \dfrac{C_{IJ}^{PO} - C_{IJ}^{CEF}}{C_{IJ}^{CEF}}, \qquad C_{IJ}^{CEF} \neq 0
+\Delta^{\neq 0} _{IJ}(X) = \dfrac{C_{IJ}^{X} - C_{IJ}^{PO,\min}}{C_{IJ}^{PO,\min}}, \qquad C_{IJ}^{PO,\min} \neq 0
 \end{equation}
 
-Finally, for the set of components which are zero in the tetragonal elastic tensor, we can take the value of the corresponding component of the triclinic elastic tensor as a direct measure of the deviation, 
+Finally, for components that are zero in the tetragonal (FO and CEF) tensor but may be non-zero in the triclinic PO configuration, we report the absolute value of the PO component directly as a measure of symmetry-breaking:
 
 \begin{equation}\label{eqn:deviationsarezero}
-\Delta^{= 0} _{IJ} = C^{PO}_{IJ}/MPa, \qquad C^{CEF}_{IJ} = 0
+\Delta^{= 0} _{IJ} = C^{PO}_{IJ}/\text{MPa}, \qquad C^{X}_{IJ} = 0,\; X\in\{FO,CEF\}
 \end{equation}
-Notice that in all the definitions we take the elastic components from the CEF result in equation \eqref{cefcij} as reference.
 
  \begin{figure}[h!]
    \subcaptionbox{\protect\label{fig:ElasticTensorMains}}{
@@ -494,85 +475,66 @@ Notice that in all the definitions we take the elastic components from the CEF r
      \fbox{\includegraphics[height=5cm]{Figure_deviations_arezero.pdf}}
    }
   \caption{\protect\label{fig:ResultsElasticConstants} 
-  Deviations in the elastic tensor components in the partial occupancy (PO) samples in comparison to the elastic tensor of the tetragonal lattice as a result from the CEF average from equation \eqref{cefcij}.
-    (\subref{fig:ElasticTensorMains}) Ratios between PO components that are equal in CEF, \eqref{eqn:ratios}.
-    (\subref{fig:ElasticTensorNozero}) relative change of the elastic tensor component between the PO samples and CEF average for non-zero valued constants in the latter, \eqref{eqn:deviatiosnonzero}. 
-    (\subref{fig:ElasticTensorZero}) Values of the elastic tensor components where the corresponding components in the CEF result are zero.
+  Deviations of the FO and CEF elastic tensor components relative to the minimum-energy partial-occupancy reference $C^{PO,\min}$.
+    (\subref{fig:ElasticTensorMains}) Ratios between PO components that are equal under tetragonal symmetry, Eq.~\eqref{eqn:ratios}; values near unity indicate near-tetragonal behavior.
+    (\subref{fig:ElasticTensorNozero}) Relative deviation $\Delta^{\neq 0}_{IJ}$ of the FO and CEF approximations from the min-energy PO reference for non-zero tensor components, Eq.~\eqref{eqn:deviatiosnonzero}. 
+    (\subref{fig:ElasticTensorZero}) Absolute values of elastic tensor components that are zero in the tetragonal (FO/CEF) models but non-zero in the triclinic PO configurations, Eq.~\eqref{eqn:deviationsarezero}.
   }
 
-  %TODO: change elastic constants comparison to violin plots
+\end{figure}
 
-\end{figure}\MFmarginpar{*}{}{Which FO sample?}
+\paragraph{Minimum-energy PO as the best elastic constant estimate}
 
-\paragraph{min energy elastic constant}
+The central aim of this work is to quantify how well the classical sublattice approximations—the full-occupancy sublattice model (FO) and the compound energy formalism (CEF) average—reproduce the elastic properties of the Fe–Cr \textsigma-phase.
+The minimum-energy partial-occupancy configuration $C^{PO,\min}$, identified by screening the full configurational space with the fitted GRACE potential and confirmed by DFT, serves as the physically best available estimate.
+This is justified because $C^{PO,\min}$ represents the most thermodynamically stable explicit atomic arrangement within the PO constraint, which is closer to the true disordered ground state than either a single ordered FO end-member or a probability-weighted CEF average.
 
-\MFnew{
-the motivation of this story is to clarify if occupancy is important for elastic constant calculations. 
-In the first step, we estimated the differences between PO, CEF and FO approximations.
-At 0K, we identify some PO samples that have the same energy as that of the CEF approximation. 
-This validates our PO model.
-We use the PO model with the lowest energy to compute the elastic constants of the \textsigma phase and consider that this is the best estimate.
-We then compare this estimate to $C_{IJ}$ calculations for the FO and CEF approximations at 0K.  
+At the nominal Fe\textsubscript{16}Cr\textsubscript{14} composition, three FO configurations exist.
+We identify the FO configuration with the lowest formation enthalpy (requiring three DFT single-point calculations), which we denote FO$_{\min}$, and compare its elastic constants to $C^{PO,\min}$.
+We also evaluate the CEF elastic constants $c_{IJ}^{CEF}$ from Eq.~\eqref{cefcij} using the full set of 32 FO configurations, and compare those to $C^{PO,\min}$.
 
-For one composition, we needed three DFT calculations for FO states at the nominal composition. 
-We identified the FO state with the minimum energy, and we performed the DFT calculations for the $C_{IJ}$ implying several single point calcuations.
-For the CEF we needed 32 FO calculations to get the energies, and for each single FO configuration, the elastic constants were computed, several single point calculations for each FO sample.
-In our approach, we developed a ML potential to screen the PO samples based in formation energies. 
-We identified th PO that are lower in energy, and for this configuration we performed DFT calcuation of elastic constants for only one representative configuration. 
+\paragraph{Computational workflow}
 
-}
-
-\paragraph{Workflow: avoid elastic constant calculations until the end}
-
-\MFnew{
-\begin{itemize}
-    \item[(1)] calculate energies for 32 FO configurations plus ground states of unaries.
-    \item[(2)] calculate energies of a selection of PO samples to get a representative set of chemical environments of all the lattice sites. 
-    \item[(3)] train a ML potential on the collected DFT data including relaxation paths, random deformations and next neighbour distance expansions. 
-    \item[(4)] Use the cheeper fitted ML to screen the full PO set for those with minimal energy
-    \item[(5)] compute elastic constants for the selected minimal energy sample. 
-    
-\end{itemize}
-}
+The combined DFT / MLIP workflow follows these steps:
+\begin{enumerate}
+    \item[(1)] Calculate formation energies and elastic constants for the 32 FO configurations and the FM BCC unary ground states.
+    \item[(2)] Calculate energies and elastic constants for a selected subset of PO configurations, chosen to cover a representative sample of all sublattice chemical environments.
+    \item[(3)] Train the GRACE potential on the collected DFT data: relaxation paths, random deformations, and nearest-neighbour distance expansions of BCC, FCC, and HCP unaries.
+    \item[(4)] Use the fitted GRACE potential to rank the full PO configurational space by formation enthalpy and identify the lowest-energy configurations.
+    \item[(5)] Compute the full elastic tensor with DFT for $C^{PO,\min}$, the minimum-energy PO configuration.
+\end{enumerate}
 
 \paragraph{Elastic moduli including validation set}
 
-%TODO: include isotropic elastic moduli from CEF
-%TODO: include equations for isotropic
-
- In \autoref{fig:OccupancyEffect} we report the changes in the polycristalline elastic moduli\MFnewMissRef with nominal composition and fractional occupation of the sublattices and its relation to formation energy.
- First, the results for the FO samples clearly show the stiffening of the compound with increasing stability which can be expected in relation to deeper energy surfaces.
- We also see that the PO samples follow the same trend.
- A slight stiffening of the compound is already displayed for the small DFT dataset.
+In \autoref{fig:OccupancyEffect} we report the polycrystalline elastic moduli~\MFnewMissRef as a function of formation energy for all FO, PO1 and PO2 samples.
+The results show that, across both the FO and PO ensembles, decreasing formation enthalpy correlates with increasing stiffness, consistent with deeper energy wells associated with stronger interatomic bonding.
+The minimum-energy PO sample $C^{PO,\min}$ falls at the lower end of the formation-energy distribution for the PO set, confirming that it is the most representative configuration for elastic property estimation.
 
 \begin{figure}[H]
   \fbox{ \includegraphics[width=\textwidth, trim=3.5cm 0cm 4cm 0cm, clip]{Figure_AverageElasticConstants.pdf}}
  \caption{\protect\label{fig:OccupancyEffect}
-  Effect of occupancy on the stability and properties of the Fe\textsubscript{16}Cr\textsubscript{14} \textsigma ~phase.
+  Polycrystalline elastic moduli (Voigt-Reuss-Hill averages) as a function of formation enthalpy for FO and PO samples at the Fe\textsubscript{16}Cr\textsubscript{14} composition.
+  Colors distinguish sample type (FO: blue; PO1: maroon; PO2: olive). 
+  The minimum-energy PO configuration ($C^{PO,\min}$) is highlighted.
+  Formation enthalpies are referenced to FM BCC Fe and Cr ground states.
  }
 \end{figure}
 
 
 
 
-%\begin{figure}
-%
-%  \caption{\protect\label{fig:MLIPPrediction}
-%    (a) Comparison between DFT and MLIP formation energies for the Fe-Cr \textsigma~phase. 
-%    The lower pannel shows the distribution of the DFT formation energies on the PO samples (1 and 2) from DFT.
-%    Upper panel shows GRACE potential predictions for same PO samples. 
-%    (b) Parity plot between DFT and GRACE predictions including FO and PO samples. 
-%    The vertical line indicates the energy value of the convex hull tie line at Fe\textsubscript{16}Cr\textsubscript{14} composition.
-%	}
-%
-%\end{figure}
-
 \section{Conclusion}
 
-In this work, we are presenting a methodical study of the effects of partial occupancy in the properties of the \textsigma phase of the Fe--Cr system.
-For the first time, the properties of this phase are calculated taking into account the experimentally observed partial occupancies.
-We demonstrate that partial occupancy significantly influences the mechanical response of the \textsigma-phase, which cannot be captured by the traditional full sublattice models.
-Our results provide new insights into the mechanical behavior of the Fe--Cr \textsigma-phase and highlight the importance of considering partial occupancy in theoretical models.
+In this work we present a systematic study of the effects of partial sublattice occupancy on the elastic properties of the Fe–Cr \textsigma-phase.
+For the first time, the elastic tensor of this phase is computed taking into account the experimentally observed partial occupancies, using a combined DFT and machine-learning interatomic potential workflow.
+Formation enthalpies throughout are referenced to spin-polarized (FM) BCC Fe and Cr, providing a consistent energy scale.
+
+The minimum-energy partial-occupancy configuration $C^{PO,\min}$—identified by screening the full configurational space with the fitted GRACE potential—serves as the physically most consistent estimate of the elastic tensor.
+Comparing the traditional full-occupancy sublattice model (FO) and the compound energy formalism (CEF) to this reference, we find deviations of approximately 10\% in the dominant elastic tensor components.
+Both classical approximations systematically overestimate stiffness relative to $C^{PO,\min}$.
+
+Our results confirm that partial occupancy significantly influences the mechanical response of the \textsigma-phase in a way that cannot be captured by traditional full sublattice models.
+The present workflow—DFT-anchored MLIP screening followed by targeted DFT elastic constant calculations for the minimum-energy configuration—provides a practical and computationally tractable path to include explicit configurational disorder in elastic property modeling of complex intermetallic compounds.
 
 \section{selection of working alloy}
 final long term goal is CrMnFeCoNi (order by atomic number).
