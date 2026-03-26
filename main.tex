@@ -202,9 +202,7 @@ In particular for \textsigma-phase,
 \end{align}
 
 \noindent where the indexes $i, j, k, l, m$ run over the elements Fe and Cr for for the sublattices \siteA, \siteB,  \siteC, \siteD~and \siteE~respectively.
-\MFnew{
-In eq 2, the temperature dependence of the enthalpy variation arises from that of the site occupancies (e.g., $y_i ^{2a}$), while $H^0_{ijklm}$ is calculated at 0K and temperature independent.
-}
+In \autoref{eqn:CEF}, the temperature dependence of the enthalpy variation arises from that of the site occupancies (e.g., $y_i ^{2a}$), while $H^0_{ijklm}$ is calculated at 0K and is temperature independent.
 The compound index \textit{\ijklm} identifies a particular end member with a given configuration. 
 $H_{i j k l m} ^0$ are the formation enthalpies at 0K of such configuraition, $m_s$ are the multiplicities of the sublattices \siteA \ldots \siteE~with $m_s = 2, 4, 8, 8, 8$ respectively, and $N$ is the total number of atoms in the unit cell.
 As this is a well established method, we refer to the original literature for further details.
@@ -219,14 +217,10 @@ Using FM BCC references ensures that both NM and FM \textsigma-phase calculation
 
 
 \paragraph{Partial occupancy}\label{methodology:po} To capture the impact of atomic disorder, we explicitly explore all possible atomic arrangements within the \textsigma-phase unit cell, incorporating experimentally reported partial occupancy of WS by Yakel~\cite{yakel_atom_1983} as reproduced in \autoref{fig:PartialOccupancies}.  
-A random distribution in the different sublattices could be modelled for instance by a special quasirandom structure \MFnew{[SQS ref]} but  this would require a big unit cell to generate a meaningful representation of such atomic distributions, in particular due to the small Cr content in the  2\textit{a} site (< 0.5 atom per unit cell).
-\MFnew{
-  In principle, partial occupancy could also be modelled from Monte Carlo molecular dynamics simulation (MDMC). 
-  First, such an approach would also require big unit cells for sufficient statitstics to represent the partial occupancies accurately. 
-  Secondly, the size of those unit cells would also make it difficult to explore elastic constants from DFT. 
-  Alternative approaches like MLIPs could be used to speed up the calculations. Such an alternative will be explored in future works. 
+A random distribution in the different sublattices could be modelled for instance by a special quasirandom structure~\cite{zunger_sqs_1990}, but this would require a big unit cell to generate a meaningful representation of such atomic distributions, in particular due to the small Cr content in the 2\textit{a} site (< 0.5 atom per unit cell).
+A 4$\times$1$\times$1 supercell (120 atoms) is the minimum cell in which every sublattice can be occupied with integer atom counts matching the experimental Yakel occupancies; we generate such an SQS for possible future comparison (see notebook \texttt{06-SQS.ipynb}).
+In principle, partial occupancy could also be modelled from Monte Carlo molecular dynamics simulation (MDMC), though such an approach would also require big unit cells for sufficient statistics to represent the partial occupancies accurately, making direct DFT elastic constant calculations impractical.
 
-}
 
 In order to keep the size of the simulation to one unit cell, we consider two approximations to the partial occupancy, in both cases disregarding Cr occupation in site \siteA~and rounding occupancy to integer numbers.  
 A first model keeps full occupancy of Fe in the sites \siteA~and \siteD, full Cr occupancy in site \siteB, but sites \siteC~and \siteE~will have 5 Cr and 3 Fe atoms per unit cell.
@@ -244,7 +238,8 @@ As shown in \autoref{fig:PartialOccupancies}, there are three possible configura
 All of them have site \siteA~filled with Cr instead of Fe. 
 In addition, only one of the \siteC, \siteD, and \siteE~sites would carry Cr, which may substantially destabilize the unit cell relative to partial-occupancy models.
 
-Among all configurations explored within each partial-occupancy model, we identify the configuration with the lowest formation enthalpy as the minimum-energy partial-occupancy sample, denoted $C^{PO,\min}$.
+Among all configurations explored across both partial-occupancy models and their DFT-validated subsets (PO1, PO2, PO1$_\text{val}$, PO2$_\text{val}$), we identify the configuration with the lowest formation enthalpy as the minimum-energy partial-occupancy sample, denoted $C^{PO,\min}$.
+This global minimum is taken over the combined pool of training and validation configurations to ensure the reference is not biased by the initial stratified sampling.
 This configuration represents the thermodynamically most favored local arrangement accessible within the partial-occupancy constraint, and therefore provides the physically most consistent estimate of the elastic tensor.
 We use $C^{PO,\min}$ as the primary reference when quantifying how well the classical sublattice approximations (FO and CEF) reproduce the elastic properties of the σ-phase.
 
@@ -279,7 +274,7 @@ In particular for the elastic constants $c_{IJ}$,
 
 In recent years, universal machine-learning interatomic potentials (MLIPs) fitted on large DFT databases have emerged as efficient screening tools for complex configurational spaces~\cite{lit_2022_06_vazquez_acta_materialia,lit_2025_01_bijjala_acta_materialia}.
 While such universal potentials can represent a wide range of chemistries, the complex atomic environments and elastic response of the \textsigma-phase may challenge their accuracy.
-Here we instead fit a dedicated GRACE\MFnew{missing ref} potential from scratch on a targeted Fe-Cr \textsigma-phase DFT dataset, using it solely as a screening tool to rank the large set of partial-occupancy configurations by formation enthalpy, not as a replacement for DFT elastic constant calculations.
+Here we instead fit a dedicated GRACE~\cite{bochkarev_grace_2024} potential from scratch on a targeted Fe-Cr \textsigma-phase DFT dataset, using it solely as a screening tool to rank the large set of partial-occupancy configurations by formation enthalpy, not as a replacement for DFT elastic constant calculations.
 As a first step, we select a subset of 25 representative configurations of each model and calculate their optimized unit cell and their elastic constants using DFT. 
 We extend the resulting dataset to build a specialized Fe-Cr \textsigma-phase DFT training set consisting of 
 
@@ -340,7 +335,7 @@ At 873\,K we obtain nearly full Fe occupancy in sites \siteA~and \siteD, both wi
 
 
 \paragraph{fitting of GRACE}
-After this first the DFT calculations set (DFT0) we fit a GRACE \MFnewMissRef potential.
+After this first the DFT calculations set (DFT0) we fit a GRACE~\cite{bochkarev_grace_2024} potential.
 Here we intend to use this potential as a screening tool to scan the full configurational space and select the most relevant configurations for further DFT calculations. 
 Therefore, the potential does not necesarilly need to be highly accurate. 
 The DFT extended dataset is ilustrated in \autoref{fig:potential_dft_compare} together with a diagram of our workflow, while the final potential performance is reported in \autoref{tab:MLIPPerformance}.
@@ -487,6 +482,7 @@ Finally, for components that are zero in the tetragonal (FO and CEF) tensor but 
 
 The central aim of this work is to quantify how well the classical sublattice approximations—the full-occupancy sublattice model (FO) and the compound energy formalism (CEF) average—reproduce the elastic properties of the Fe–Cr \textsigma-phase.
 The minimum-energy partial-occupancy configuration $C^{PO,\min}$, identified by screening the full configurational space with the fitted GRACE potential and confirmed by DFT, serves as the physically best available estimate.
+It is selected as the global minimum over the combined pool of PO training and DFT-validated configurations (PO1\,$\cup$\,PO2\,$\cup$\,PO1$_\text{val}$\,$\cup$\,PO2$_\text{val}$).
 This is justified because $C^{PO,\min}$ represents the most thermodynamically stable explicit atomic arrangement within the PO constraint, which is closer to the true disordered ground state than either a single ordered FO end-member or a probability-weighted CEF average.
 
 At the nominal Fe\textsubscript{16}Cr\textsubscript{14} composition, three FO configurations exist.
@@ -501,12 +497,13 @@ The combined DFT / MLIP workflow follows these steps:
     \item[(2)] Calculate energies and elastic constants for a selected subset of PO configurations, chosen to cover a representative sample of all sublattice chemical environments.
     \item[(3)] Train the GRACE potential on the collected DFT data: relaxation paths, random deformations, and nearest-neighbour distance expansions of BCC, FCC, and HCP unaries.
     \item[(4)] Use the fitted GRACE potential to rank the full PO configurational space by formation enthalpy and identify the lowest-energy configurations.
-    \item[(5)] Compute the full elastic tensor with DFT for $C^{PO,\min}$, the minimum-energy PO configuration.
+    \item[(5)] Validate the GRACE ranking by computing DFT elastic tensors for a subset of near-minimum configurations (PO1$_\text{val}$, PO2$_\text{val}$); pool these with the training set to identify $C^{PO,\min}$, the global minimum-energy PO configuration.
+    \item[(6)] Compute the full elastic tensor with DFT for $C^{PO,\min}$.
 \end{enumerate}
 
 \paragraph{Elastic moduli including validation set}
 
-In \autoref{fig:OccupancyEffect} we report the polycrystalline elastic moduli~\MFnewMissRef as a function of formation energy for all FO, PO1 and PO2 samples.
+In \autoref{fig:OccupancyEffect} we report the polycrystalline elastic moduli~\cite{chung_voigtreusshill_1967} as a function of formation energy for all FO, PO1 and PO2 samples.
 The results show that, across both the FO and PO ensembles, decreasing formation enthalpy correlates with increasing stiffness, consistent with deeper energy wells associated with stronger interatomic bonding.
 The minimum-energy PO sample $C^{PO,\min}$ falls at the lower end of the formation-energy distribution for the PO set, confirming that it is the most representative configuration for elastic property estimation.
 
@@ -529,7 +526,7 @@ In this work we present a systematic study of the effects of partial sublattice 
 For the first time, the elastic tensor of this phase is computed taking into account the experimentally observed partial occupancies, using a combined DFT and machine-learning interatomic potential workflow.
 Formation enthalpies throughout are referenced to spin-polarized (FM) BCC Fe and Cr, providing a consistent energy scale.
 
-The minimum-energy partial-occupancy configuration $C^{PO,\min}$—identified by screening the full configurational space with the fitted GRACE potential—serves as the physically most consistent estimate of the elastic tensor.
+The minimum-energy partial-occupancy configuration $C^{PO,\min}$—identified by screening the full configurational space with the fitted GRACE potential and selected as the global minimum over the combined training and DFT-validated pool—serves as the physically most consistent estimate of the elastic tensor.
 Comparing the traditional full-occupancy sublattice model (FO) and the compound energy formalism (CEF) to this reference, we find deviations of approximately 10\% in the dominant elastic tensor components.
 Both classical approximations systematically overestimate stiffness relative to $C^{PO,\min}$.
 
